@@ -10,7 +10,8 @@ from contents.app import *
 
 @app.callback(
     Output('the-data', 'data'),
-    Output('success-alert', 'is_open'),
+    Output('datatable', 'data'),
+    Output('datatable', 'columns'),
     Input('upload-data', 'contents'),
     State('upload-data', 'filename'),
     State('upload-data', 'last_modified')
@@ -29,27 +30,14 @@ def upload_data(contents, filename, date):
 
         return [
             df_dict,
-            True,
-        ]
-    raise PreventUpdate
-
-@app.callback(
-    Output('add-data-table', 'data'),
-    Output('add-data-table', 'columns'),
-    Input("the-data", "data"),
-)
-def update_table(data):
-    if data:
-        df = pd.DataFrame.from_dict(data)
-        return [
-            data,
+            df_dict,
             [{'name': i, 'id': i} for i in df.columns],
         ]
     raise PreventUpdate
 
 @app.callback(
-    Output('add-data-table', 'data'),
-    Output('add-data-table', 'columns'),
+    Output('datatable', 'data'),
+    Output('datatable', 'columns'),
     Input('url', 'pathname'),
     State('the-data', 'data')
 )

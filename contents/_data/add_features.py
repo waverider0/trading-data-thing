@@ -7,16 +7,32 @@ from contents.app import *
 
 
 @app.callback(
-    Output('add-features-table', 'data'),
-    Output('add-features-table', 'columns'),
-    Input('add-features-refresh', 'n_clicks'),
-    State('the-data', 'data')
+    # Table and Data
+    Output('the-data', 'data'),
+    Output('datatable', 'data'),
+    Output('datatable', 'columns'),
+    # Dropdowns
+    Output('type-casting-feature-dropdown', 'options'),
+    Output('drop-features-dropdown', 'options'),
+    Output('transformations-base-features', 'options'),
+    # Inputs
+    Input('drop-features-button', 'n_clicks'),
+    State('drop-features-dropdown', 'value'),
+    State('the-data', 'data'),
 )
-def render_table(n_clicks, data):
-    if n_clicks and data:
-        df = pd.DataFrame.from_dict(data)
+def drop_features(n_clicks, features, data):
+    df = pd.DataFrame.from_dict(data)
+    if n_clicks and features and data:
+        df = df.drop(features, axis=1)
+        data = df.to_dict('records')
+        features_names = [{'name': i, 'id': i} for i in df.columns],
         return [
             data,
-            [{'name': i, 'id': i} for i in df.columns],
+            data,
+            features_names,
+            features_names,
+            features_names,
+            features_names,
         ]
     raise PreventUpdate
+
