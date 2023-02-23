@@ -18,7 +18,7 @@ import plotly.graph_objs as go
 # Module Layouts #
 ##################
 add_data = [
-    html.H2('Add Data'),
+    html.H2('Add Data', id='header'),
     dmc.Container([
         # datatable
         dash_table.DataTable(
@@ -62,6 +62,7 @@ add_data = [
             )
         ], style={'display': 'flex'}),
     ],
+    id='add-data-container',
     fluid=True,
     style={
         'border-style': 'solid',
@@ -69,6 +70,13 @@ add_data = [
         'border-width': '1px',
         'padding': '12px',
     }
+    ),
+    dbc.Popover(
+        [],
+        target='add-data-container',
+        trigger='hover',
+        hide_arrow=False,
+        id='add-data-container-popover',
     ),
     html.Div(style={'height': '10px'}),
 ]
@@ -897,7 +905,7 @@ app.layout = html.Div([
     # page content
     dmc.Timeline(
         id='timeline',
-        #active=12,
+        #active=0,
         #color='gray',
         lineWidth=2,
         bulletSize=35,
@@ -1159,3 +1167,14 @@ def hover_forecasting(is_open):
     if is_open:
         return False
     return True
+
+#
+app.callback(
+    #Output('navbutton-add-data', 'outline'),
+    Output('timeline', 'active'),
+    Input('add-data-container-popover', 'is_open'),
+)
+def hover_add_data(is_open):
+    if is_open:
+        return 1
+    return 0
