@@ -10,8 +10,7 @@ from contents.app import *
 
 @app.callback(
     Output('the-data', 'data'),
-    Output('datatable', 'data'),
-    Output('datatable', 'columns'),
+    Output('hidden-div', 'children'),
     Input('upload-data', 'contents'),
     State('upload-data', 'filename'),
     State('upload-data', 'last_modified')
@@ -26,26 +25,7 @@ def upload_data(contents, filename, date):
         elif 'xls' in filename:
             # Assume that the user uploaded an excel file
             df = pd.read_excel(io.BytesIO(decoded))
-        df_dict = df.to_dict('records')
 
-        return [
-            df_dict,
-            df_dict,
-            [{'name': i, 'id': i} for i in df.columns],
-        ]
+        return df.to_dict('records'), ''
     raise PreventUpdate
 
-@app.callback(
-    Output('datatable', 'data'),
-    Output('datatable', 'columns'),
-    Input('url', 'pathname'),
-    State('the-data', 'data')
-)
-def render_table(path, data):
-    if path == '/add-data':
-        df = pd.DataFrame.from_dict(data)
-        return [
-            data,
-            [{'name': i, 'id': i} for i in df.columns],
-        ]
-    raise PreventUpdate
