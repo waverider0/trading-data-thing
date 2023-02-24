@@ -5,50 +5,6 @@ from dash.exceptions import PreventUpdate
 
 from contents.app import *
 
-@app.callback(
-    # Table
-    Output('preprocessing-table', 'data'),
-    Output('preprocessing-table', 'columns'),
-    # Plots
-    Output('missing-values-plot', 'figure'),
-    # Inputs
-    Input('preprocessing-refresh', 'n_clicks'),
-    State('the-data', 'data')
-)
-def render_table(n_clicks, data):
-    if n_clicks and data:
-        df = pd.DataFrame.from_dict(data)
-        missing_values = df.isnull().sum()
-        return [
-            # Table
-            data,
-            [{'name': i, 'id': i} for i in df.columns],
-            # Plots
-            go.Figure(
-                data=[
-                    go.Bar(
-                        x=missing_values.index,
-                        y=missing_values.values,
-                        name='Number of Nulls'
-                    ),
-                ],
-                layout=go.Layout(
-                    title='Missing Values',
-                    xaxis=dict(
-                        titlefont=dict(color='#FFFFFF'),
-                        showgrid=False,
-                    ),
-                    yaxis=dict(
-                        titlefont=dict(color='#FFFFFF'),
-                        showgrid=False,
-                    ),
-                    plot_bgcolor='rgba(0,0,0,0)',
-                    paper_bgcolor='rgba(0,0,0,0)',
-                    font=dict(color='#FFFFFF'),
-                ),
-            ),
-        ]
-    raise PreventUpdate
 
 @app.callback(
     Output('the-data', 'data'),

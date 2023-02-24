@@ -75,7 +75,7 @@ add_data = [
         [],
         target='add-data-container',
         trigger='hover',
-        hide_arrow=False,
+        hide_arrow=True,
         id='add-data-container-popover',
     ),
     html.Div(style={'height': '10px'}),
@@ -215,6 +215,7 @@ add_features = [
             ),
         ], start_collapsed=True, always_open=False),
     ], 
+    id='add-features-container',
     fluid=True,
     style={
         'border-style': 'solid',
@@ -222,6 +223,13 @@ add_features = [
         'border-width': '1px',
         'padding': '12px',
     }
+    ),
+    dbc.Popover(
+        [],
+        target='add-features-container',
+        trigger='hover',
+        hide_arrow=True,
+        id='add-features-container-popover',
     ),
     html.Div(style={'height': '10px'}),
 ]
@@ -269,6 +277,7 @@ preprocessing = [
             ),
         ], start_collapsed=True, always_open=False)
     ],
+    id='preprocessing-container',
     fluid=True,
     style={
         'border-style': 'solid',
@@ -276,6 +285,13 @@ preprocessing = [
         'border-width': '1px',
         'padding': '12px',
     }
+    ),
+    dbc.Popover(
+        [],
+        target='preprocessing-container',
+        trigger='hover',
+        hide_arrow=True,
+        id='preprocessing-container-popover',
     ),
 ]
 
@@ -294,6 +310,7 @@ price_charts = [
             ),
         ], start_collapsed=True, always_open=False),
     ],
+    id='price-charts-container',
     fluid=True,
     style={
         'border-style': 'solid',
@@ -301,7 +318,14 @@ price_charts = [
         'border-width': '1px',
         'padding': '12px',
     }
-    )
+    ),
+    dbc.Popover(
+        [],
+        target='price-charts-container',
+        trigger='hover',
+        hide_arrow=True,
+        id='price-charts-container-popover',
+    ),
 ]
 distributions = [
     html.H2('Distributions'),
@@ -321,6 +345,7 @@ distributions = [
             ),
         ], start_collapsed=True, always_open=False),
     ],
+    id='distributions-container',
     fluid=True,
     style={
         'border-style': 'solid',
@@ -328,6 +353,13 @@ distributions = [
         'border-width': '1px',
         'padding': '12px',
     }
+    ),
+    dbc.Popover(
+        [],
+        target='distributions-container',
+        trigger='hover',
+        hide_arrow=True,
+        id='distributions-container-popover',
     ),
 ]
 statistical_association = [
@@ -348,6 +380,7 @@ statistical_association = [
             ),
         ], start_collapsed=True, always_open=False),
     ],
+    id='statistical-association-container',
     fluid=True,
     style={
         'border-style': 'solid',
@@ -355,6 +388,13 @@ statistical_association = [
         'border-width': '1px',
         'padding': '12px',
     }
+    ),
+    dbc.Popover(
+        [],
+        target='statistical-association-container',
+        trigger='hover',
+        hide_arrow=True,
+        id='statistical-association-container-popover',
     ),
 
 ]
@@ -367,6 +407,7 @@ temporal_sequence = [
             ),
         ], start_collapsed=True, always_open=False),
     ],
+    id='temporal-sequence-container',
     fluid=True,
     style={
         'border-style': 'solid',
@@ -374,6 +415,13 @@ temporal_sequence = [
         'border-width': '1px',
         'padding': '12px',
     }
+    ),
+    dbc.Popover(
+        [],
+        target='temporal-sequence-container',
+        trigger='hover',
+        hide_arrow=True,
+        id='temporal-sequence-container-popover',
     ),
 ]
 
@@ -392,6 +440,7 @@ feature_importance = [
             ),
         ], start_collapsed=True, always_open=False),
     ],
+    id='feature-importance-container',
     fluid=True,
     style={
         'border-style': 'solid',
@@ -399,6 +448,13 @@ feature_importance = [
         'border-width': '1px',
         'padding': '12px',
     }
+    ),
+    dbc.Popover(
+        [],
+        target='feature-importance-container',
+        trigger='hover',
+        hide_arrow=True,
+        id='feature-importance-container-popover',
     ),
 ]
 dimensionality_reduction = [
@@ -416,6 +472,7 @@ dimensionality_reduction = [
             ),
         ], start_collapsed=True, always_open=False),
     ],
+    id='dimensionality-reduction-container',
     fluid=True,
     style={
         'border-style': 'solid',
@@ -423,6 +480,13 @@ dimensionality_reduction = [
         'border-width': '1px',
         'padding': '12px',
     }
+    ),
+    dbc.Popover(
+        [],
+        target='dimensionality-reduction-container',
+        trigger='hover',
+        hide_arrow=True,
+        id='dimensionality-reduction-container-popover',
     ),
 ]
 hyperparameter_tuning = [
@@ -449,6 +513,7 @@ hyperparameter_tuning = [
             ),
         ], start_collapsed=True, always_open=False),
     ],
+    id='hyperparameter-tuning-container',
     fluid=True,
     style={
         'border-style': 'solid',
@@ -456,6 +521,13 @@ hyperparameter_tuning = [
         'border-width': '1px',
         'padding': '12px',
     }
+    ),
+    dbc.Popover(
+        [],
+        target='hyperparameter-tuning-container',
+        trigger='hover',
+        hide_arrow=True,
+        id='hyperparameter-tuning-container-popover',
     ),
 ]
 modeling = [
@@ -470,6 +542,7 @@ modeling = [
             ),
         ], start_collapsed=True, always_open=False),
     ],
+    id='modeling-container',
     fluid=True,
     style={
         'border-style': 'solid',
@@ -477,6 +550,13 @@ modeling = [
         'border-width': '1px',
         'padding': '12px',
     }
+    ),
+    dbc.Popover(
+        [],
+        target='modeling-container',
+        trigger='hover',
+        hide_arrow=True,
+        id='modeling-container-popover',
     ),
 ]
 forecasting = [
@@ -488,6 +568,7 @@ forecasting = [
             ),
         ], start_collapsed=True, always_open=False),
     ],
+    id='forecasting-container',
     fluid=True,
     style={
         'border-style': 'solid',
@@ -495,6 +576,13 @@ forecasting = [
         'border-width': '1px',
         'padding': '12px',
     }
+    ),
+    dbc.Popover(
+        [],
+        target='forecasting-container',
+        trigger='hover',
+        hide_arrow=True,
+        id='forecasting-container-popover',
     ),
 ]
 
@@ -507,7 +595,6 @@ external_stylesheets = [dbc.themes.DARKLY, dbc_css]
 app = DashProxy(
     __name__,
     external_stylesheets=external_stylesheets,
-    suppress_callback_exceptions=True,
     prevent_initial_callbacks=True,
     transforms=[MultiplexerTransform()],
     title='Quant Toolkit'
@@ -574,7 +661,7 @@ app.layout = html.Div([
                     target='navbutton-add-data',
                     trigger='hover',
                     hide_arrow=True,
-                    id='add-data-popover',
+                    id='add-data-navbutton-popover',
                 ),
                 # add features
                 dbc.Button(
@@ -596,7 +683,7 @@ app.layout = html.Div([
                     target='navbutton-add-features',
                     trigger='hover',
                     hide_arrow=True,
-                    id='add-features-popover',
+                    id='add-features-navbutton-popover',
                 ),
                 # preprocessing
                 dbc.Button(
@@ -618,7 +705,7 @@ app.layout = html.Div([
                     target='navbutton-preprocessing',
                     trigger='hover',
                     hide_arrow=True,
-                    id='preprocessing-popover',
+                    id='preprocessing-navbutton-popover',
                 ),
                 ############################################################################################
                 # ANALYSIS
@@ -665,7 +752,7 @@ app.layout = html.Div([
                     target='navbutton-price-charts',
                     trigger='hover',
                     hide_arrow=True,
-                    id='price-charts-popover',
+                    id='price-charts-navbutton-popover',
                 ),
                 # distributions
                 dbc.Button(
@@ -687,7 +774,7 @@ app.layout = html.Div([
                     target='navbutton-distributions',
                     trigger='hover',
                     hide_arrow=True,
-                    id='distributions-popover',
+                    id='distributions-navbutton-popover',
                 ),
                 # statistical association
                 dbc.Button(
@@ -709,7 +796,7 @@ app.layout = html.Div([
                     target='navbutton-statistical-association',
                     trigger='hover',
                     hide_arrow=True,
-                    id='statistical-association-popover',
+                    id='statistical-association-navbutton-popover',
                 ),
                 # temporal sequence
                 dbc.Button(
@@ -731,7 +818,7 @@ app.layout = html.Div([
                     target='navbutton-temporal-sequence',
                     trigger='hover',
                     hide_arrow=True,
-                    id='temporal-sequence-popover',
+                    id='temporal-sequence-navbutton-popover',
                 ),
                 ############################################################################################
                 # MACHINE LEARNING
@@ -778,7 +865,7 @@ app.layout = html.Div([
                     target='navbutton-feature-importance',
                     trigger='hover',
                     hide_arrow=True,
-                    id='feature-importance-popover',
+                    id='feature-importance-navbutton-popover',
                 ),
                 # dimensionality reduction
                 dbc.Button(
@@ -800,7 +887,7 @@ app.layout = html.Div([
                     target='navbutton-dimensionality-reduction',
                     trigger='hover',
                     hide_arrow=True,
-                    id='dimensionality-reduction-popover',
+                    id='dimensionality-reduction-navbutton-popover',
                 ),
                 # hyperparameter tuning
                 dbc.Button(
@@ -822,7 +909,7 @@ app.layout = html.Div([
                     target='navbutton-hyperparameter-tuning',
                     trigger='hover',
                     hide_arrow=True,
-                    id='hyperparameter-tuning-popover',
+                    id='hyperparameter-tuning-navbutton-popover',
                 ),
                 # modeling
                 dbc.Button(
@@ -844,7 +931,7 @@ app.layout = html.Div([
                     target='navbutton-modeling',
                     trigger='hover',
                     hide_arrow=True,
-                    id='modeling-popover',
+                    id='modeling-navbutton-popover',
                 ),
                 # forecasting
                 dbc.Button(
@@ -866,7 +953,7 @@ app.layout = html.Div([
                     target='navbutton-forecasting',
                     trigger='hover',
                     hide_arrow=True,
-                    id='forecasting-popover',
+                    id='forecasting-navbutton-popover',
                 ),
                 ############################################################################################
                 # ALERTS
@@ -905,26 +992,27 @@ app.layout = html.Div([
     # page content
     dmc.Timeline(
         id='timeline',
-        #active=0,
-        #color='gray',
         lineWidth=2,
         bulletSize=35,
         children=[
             # Data
             dmc.TimelineItem(
                 id='add-data',
+                lineVariant='solid',
                 children=add_data,
                 bullet=DashIconify(icon="bi:database-fill-add", width=25, height=25),
                 style={'color': '#FFFFFF'},
             ),
             dmc.TimelineItem(
                 id='add-features',
+                lineVariant='solid',
                 children=add_features,
                 bullet=DashIconify(icon="material-symbols:add-chart-rounded", width=25, height=25),
                 style={'color': '#FFFFFF'},
             ),
             dmc.TimelineItem(
                 id='preprocessing',
+                lineVariant='solid',
                 children=preprocessing,
                 bullet=DashIconify(icon="carbon:clean", width=25, height=25),
                 style={'color': '#FFFFFF'},
@@ -932,24 +1020,28 @@ app.layout = html.Div([
             # Analysis Tools
             dmc.TimelineItem(
                 id='price-charts',
+                lineVariant='solid',
                 children=price_charts,
                 bullet=DashIconify(icon="iconoir:candlestick-chart", width=25, height=25),
                 style={'color': '#FFFFFF'},
             ),
             dmc.TimelineItem(
                 id='distributions',
+                lineVariant='solid',
                 children=distributions,
                 bullet=DashIconify(icon="mdi:chart-bell-curve", width=25, height=25),
                 style={'color': '#FFFFFF'},
             ),
             dmc.TimelineItem(
                 id='statistical-association',
+                lineVariant='solid',
                 children=statistical_association,
                 bullet=DashIconify(icon="fluent:arrow-trending-lines-20-filled", width=25, height=25),
                 style={'color': '#FFFFFF'},
             ),
             dmc.TimelineItem(
                 id='temporal-sequence',
+                lineVariant='solid',
                 children=temporal_sequence,
                 bullet=DashIconify(icon="ic:outline-access-time", width=25, height=25),
                 style={'color': '#FFFFFF'},
@@ -957,30 +1049,35 @@ app.layout = html.Div([
             # Machine Learning
             dmc.TimelineItem(
                 id='feature-importance',
+                lineVariant='solid',
                 children=feature_importance,
                 bullet=DashIconify(icon="healthicons:medium-bars", width=25, height=25),
                 style={'color': '#FFFFFF'},
             ),
             dmc.TimelineItem(
                 id='dimensionality-reduction',
+                lineVariant='solid',
                 children=dimensionality_reduction,
                 bullet=DashIconify(icon="fluent-mdl2:web-components", width=25, height=25),
                 style={'color': '#FFFFFF'},
             ),
             dmc.TimelineItem(
                 id='hyperparameter-tuning',
+                lineVariant='solid',
                 children=hyperparameter_tuning,
                 bullet=DashIconify(icon="zondicons:tuning", width=25, height=25),
                 style={'color': '#FFFFFF'},
             ),
             dmc.TimelineItem(
                 id='modeling',
+                lineVariant='solid',
                 children=modeling,
                 bullet=DashIconify(icon="fluent-mdl2:server-processes", width=25, height=25),
                 style={'color': '#FFFFFF'},
             ),
             dmc.TimelineItem(
                 id='forecasting',
+                lineVariant='solid',
                 children=forecasting,
                 bullet=DashIconify(icon="carbon:forecast-lightning", width=25, height=25),
                 style={'color': '#FFFFFF'},
@@ -1062,119 +1159,132 @@ def update_ui_components(_, data):
 ###########################
 @app.callback(
     Output('navbutton-add-data', 'outline'),
-    Input('add-data-popover', 'is_open'),
+    Output('add-data', 'lineVariant'),
+    Input('add-data-navbutton-popover', 'is_open'),
+    Input('add-data-container-popover', 'is_open')
 )
-def hover_add_data(is_open):
-    if is_open:
-        return False
-    return True
+def hover_add_data(is_open1, is_open2):
+    if is_open1 or is_open2:
+        return False, 'dashed'
+    return True, 'solid'
 
 @app.callback(
     Output('navbutton-add-features', 'outline'),
-    Input('add-features-popover', 'is_open'),
+    Output('add-features', 'lineVariant'),
+    Input('add-features-navbutton-popover', 'is_open'),
+    Input('add-features-container-popover', 'is_open')
 )
-def hover_add_features(is_open):
-    if is_open:
-        return False
-    return True
+def hover_add_features(is_open1, is_open2):
+    if is_open1 or is_open2:
+        return False, 'dashed'
+    return True, 'solid'
 
 @app.callback(
     Output('navbutton-preprocessing', 'outline'),
-    Input('preprocessing-popover', 'is_open'),
+    Output('preprocessing', 'lineVariant'),
+    Input('preprocessing-navbutton-popover', 'is_open'),
+    Input('preprocessing-container-popover', 'is_open')
 )
-def hover_preprocessing(is_open):
-    if is_open:
-        return False
-    return True
+def hover_preprocessing(is_open1, is_open2):
+    if is_open1 or is_open2:
+        return False, 'dashed'
+    return True, 'solid'
 
 @app.callback(
     Output('navbutton-price-charts', 'outline'),
-    Input('price-charts-popover', 'is_open'),
+    Output('price-charts', 'lineVariant'),
+    Input('price-charts-navbutton-popover', 'is_open'),
+    Input('price-charts-container-popover', 'is_open')
 )
-def hover_price_charts(is_open):
-    if is_open:
-        return False
-    return True
+def hover_price_charts(is_open1, is_open2):
+    if is_open1 or is_open2:
+        return False, 'dashed'
+    return True, 'solid'
 
 @app.callback(
     Output('navbutton-distributions', 'outline'),
-    Input('distributions-popover', 'is_open'),
+    Output('distributions', 'lineVariant'),
+    Input('distributions-navbutton-popover', 'is_open'),
+    Input('distributions-container-popover', 'is_open')
 )
-def hover_distributions(is_open):
-    if is_open:
-        return False
-    return True
+def hover_distributions(is_open1, is_open2):
+    if is_open1 or is_open2:
+        return False, 'dashed'
+    return True, 'solid'
 
 @app.callback(
     Output('navbutton-statistical-association', 'outline'),
-    Input('statistical-association-popover', 'is_open'),
+    Output('statistical-association', 'lineVariant'),
+    Input('statistical-association-navbutton-popover', 'is_open'),
+    Input('statistical-association-container-popover', 'is_open')
 )
-def hover_statistical_association(is_open):
-    if is_open:
-        return False
-    return True
+def hover_statistical_association(is_open1, is_open2):
+    if is_open1 or is_open2:
+        return False, 'dashed'
+    return True, 'solid'
 
 @app.callback(
     Output('navbutton-temporal-sequence', 'outline'),
-    Input('temporal-sequence-popover', 'is_open'),
+    Output('temporal-sequence', 'lineVariant'),
+    Input('temporal-sequence-navbutton-popover', 'is_open'),
+    Input('temporal-sequence-container-popover', 'is_open')
 )
-def hover_temporal_sequence(is_open):
-    if is_open:
-        return False
-    return True
+def hover_temporal_sequence(is_open1, is_open2):
+    if is_open1 or is_open2:
+        return False, 'dashed'
+    return True, 'solid'
 
 @app.callback(
     Output('navbutton-feature-importance', 'outline'),
-    Input('feature-importance-popover', 'is_open'),
+    Output('feature-importance', 'lineVariant'),
+    Input('feature-importance-navbutton-popover', 'is_open'),
+    Input('feature-importance-container-popover', 'is_open')
 )
-def hover_feature_importance(is_open):
-    if is_open:
-        return False
-    return True
+def hover_feature_importance(is_open1, is_open2):
+    if is_open1 or is_open2:
+        return False, 'dashed'
+    return True, 'solid'
 
 @app.callback(
     Output('navbutton-dimensionality-reduction', 'outline'),
-    Input('dimensionality-reduction-popover', 'is_open'),
+    Output('dimensionality-reduction', 'lineVariant'),
+    Input('dimensionality-reduction-navbutton-popover', 'is_open'),
+    Input('dimensionality-reduction-container-popover', 'is_open')
 )
-def hover_dimensionality_reduction(is_open):
-    if is_open:
-        return False
-    return True
+def hover_dimensionality_reduction(is_open1, is_open2):
+    if is_open1 or is_open2:
+        return False, 'dashed'
+    return True, 'solid'
 
 @app.callback(
     Output('navbutton-hyperparameter-tuning', 'outline'),
-    Input('hyperparameter-tuning-popover', 'is_open'),
+    Output('hyperparameter-tuning', 'lineVariant'),
+    Input('hyperparameter-tuning-navbutton-popover', 'is_open'),
+    Input('hyperparameter-tuning-container-popover', 'is_open')
 )
-def hover_hyperparameter_tuning(is_open):
-    if is_open:
-        return False
-    return True
+def hover_hyperparameter_tuning(is_open1, is_open2):
+    if is_open1 or is_open2:
+        return False, 'dashed'
+    return True, 'solid'
 
 @app.callback(
     Output('navbutton-modeling', 'outline'),
-    Input('modeling-popover', 'is_open'),
+    Output('modeling', 'lineVariant'),
+    Input('modeling-navbutton-popover', 'is_open'),
+    Input('modeling-container-popover', 'is_open')
 )
-def hover_modeling(is_open):
-    if is_open:
-        return False
-    return True
+def hover_modeling(is_open1, is_open2):
+    if is_open1 or is_open2:
+        return False, 'dashed'
+    return True, 'solid'
 
 @app.callback(
     Output('navbutton-forecasting', 'outline'),
-    Input('forecasting-popover', 'is_open'),
+    Output('forecasting', 'lineVariant'),
+    Input('forecasting-navbutton-popover', 'is_open'),
+    Input('forecasting-container-popover', 'is_open')
 )
-def hover_forecasting(is_open):
-    if is_open:
-        return False
-    return True
-
-#
-app.callback(
-    #Output('navbutton-add-data', 'outline'),
-    Output('timeline', 'active'),
-    Input('add-data-container-popover', 'is_open'),
-)
-def hover_add_data(is_open):
-    if is_open:
-        return 1
-    return 0
+def hover_forecasting(is_open1, is_open2):
+    if is_open1 or is_open2:
+        return False, 'dashed'
+    return True, 'solid'
