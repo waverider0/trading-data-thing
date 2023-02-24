@@ -7,6 +7,7 @@ from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 
 from dash import dash_table
+import dash_daq as daq
 import dash_bootstrap_components as dbc
 import dash_loading_spinners as dls
 import dash_mantine_components as dmc
@@ -333,9 +334,71 @@ distributions = [
         dbc.Accordion([
             dbc.AccordionItem(
                 title="Variance Plots",
+                children=[
+                    html.Div([
+                        html.B('Scale Data', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        daq.BooleanSwitch(
+                            id='var-plot-scale-data',
+                            on=False,
+                            style={'margin-top': '5px'}
+                        ),
+                        html.Div(style={'width': '10px'}),
+                        html.B('Select Plot Type', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='var-plot-type',
+                            options=[
+                                {'label': 'Box', 'value': 'box'},
+                                {'label': 'Violin', 'value': 'violin'},
+                            ],
+                            value='scatter',
+                            style={'width': '100%'}
+                        ),
+                    ], style={'display': 'flex'}),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='var-plot-container'),
+                ],
             ),
             dbc.AccordionItem(
                 title="Distribution Plots",
+                children=[
+                    html.Div([
+                        html.B('Scale Data', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        daq.BooleanSwitch(
+                            id='dist-plot-scale-data',
+                            on=False,
+                            style={'margin-top': '5px'}
+                        ),
+                        html.Div(style={'width': '10px'}),
+                        html.B('Select Feature', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='dist-plot-feature',
+                            options=[],
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '10px'}),
+                        html.B('Select Distributions', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='dist-plot-distributions',
+                            options=[
+                                {'label': 'Normal', 'value': 'normal'},
+                                {'label': 'Log Normal', 'value': 'lognormal'},
+                                {'label': 'Exponential', 'value': 'exponential'},
+                                {'label': 'Poisson', 'value': 'poisson'},
+                                {'label': 'Gamma', 'value': 'gamma'},
+                                {'label': 'Gumbel', 'value': 'gumbel'},
+                            ],
+                            multi=True,
+                            style={'width': '100%'}
+                        ),
+                    ], style={'display': 'flex'}),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='dist-plot-container'),
+                ],
             ),
             dbc.AccordionItem(
                 title="QQ Plots",
@@ -367,16 +430,89 @@ statistical_association = [
     dmc.Container([
         dbc.Accordion([
             dbc.AccordionItem(
-                title="Line Plots",
+                title="Line Plot",
+                children=[
+                    html.Div([
+                        html.B('Scale Data', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        daq.BooleanSwitch(
+                            id='line-plot-scale-data',
+                            on=False,
+                            style={'margin-top': '5px'}
+                        ),
+                        html.Div(style={'width': '10px'}),
+                        html.B('Select Features', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='line-plot-features',
+                            options=[],
+                            multi=True,
+                            style={'width': '100%'}
+                        ),
+                    ], style={'display': 'flex'}),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='line-plot-container'),
+                ]
             ),
             dbc.AccordionItem(
                 title="Association Matrices",
-            ),
-            dbc.AccordionItem(
-                title="Heatmaps",
+                children=[
+                    html.Div([
+                        html.B('Scale Data', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        daq.BooleanSwitch(
+                            id='assoc-matrix-scale-data',
+                            on=False,
+                            style={'margin-top': '5px'}
+                        ),
+                        html.Div(style={'width': '10px'}),
+                        html.B('Select Association Metric', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='assoc-matrix-metric',
+                            options=[
+                                {'label': 'Covariance', 'value': 'cov'},
+                                {'label': 'Pearson Correlation', 'value': 'pearson'},
+                                {'label': 'Spearman Rho', 'value': 'spearman'},
+                                {'label': 'Kendall Tau', 'value': 'kendall'},
+                                {'label': 'Mutual Information', 'value': 'mutual_info'},
+                                {'label': 'KSG Mutual Information', 'value': 'ksg'},
+                                {'label': 'Maximal Information Coefficient', 'value': 'mic'},
+                                {'label': 'Copula Distance', 'value': 'copula'},
+                            ],
+                            style={'width': '100%'}
+                        ),
+                    ], style={'display': 'flex'}),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='assoc-matrix-container'),
+                ]
             ),
             dbc.AccordionItem(
                 title="Joint Plots",
+                children=[
+                    html.Div([
+                        html.B('X Feature', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='joint-plot-feature-x',
+                            options=[],
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        html.B('Y Feature', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='joint-plot-feature-y',
+                            options=[],
+                            style={'width': '100%'}
+                        ),
+                    ], style={'display': 'flex'}),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='joint-plot-container'),
+                ]
+            ),
+            dbc.AccordionItem(
+                title="Heatmaps",
             ),
         ], start_collapsed=True, always_open=False),
     ],
@@ -405,6 +541,12 @@ temporal_sequence = [
             dbc.AccordionItem(
                 title='Dynamic Time Warping',
             ),
+            dbc.AccordionItem(
+                title='Stationarity Tests',
+            ),
+            dbc.AccordionItem(
+                title='Feature Drift',
+            ),
         ], start_collapsed=True, always_open=False),
     ],
     id='temporal-sequence-container',
@@ -431,12 +573,66 @@ feature_importance = [
         dbc.Accordion([
             dbc.AccordionItem(
                 title='Recursive Feature Elimination',
+                children=[
+                    html.Div([
+                        html.B('Model Type', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='rfe-model-type',
+                            options=[
+                                {'label': 'Classification', 'value': 'clf'},
+                                {'label': 'Regression', 'value': 'reg'},
+                            ],
+                            style={'width': '100%'}
+                        ),
+                    ], style={'display': 'flex'}),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='rfe-inputs-container'),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='rfe-plot-container'),
+                ]
             ),
             dbc.AccordionItem(
                 title='Sequential Feature Selection',
+                children=[
+                    html.Div([
+                        html.B('Model Type', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='sfs-model-type',
+                            options=[
+                                {'label': 'Classification', 'value': 'clf'},
+                                {'label': 'Regression', 'value': 'reg'},
+                            ],
+                            style={'width': '100%'}
+                        ),
+                    ], style={'display': 'flex'}),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='sfs-inputs-container'),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='sfs-plot-container'),
+                ]
             ),
             dbc.AccordionItem(
                 title='Boruta SHAP',
+                children=[
+                    html.Div([
+                        html.B('Model Type', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='boruta-shap-model-type',
+                            options=[
+                                {'label': 'Classification', 'value': 'clf'},
+                                {'label': 'Regression', 'value': 'reg'},
+                            ],
+                            style={'width': '100%'}
+                        ),
+                    ], style={'display': 'flex'}),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='boruta-shap-inputs-container'),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='boruta-shap-plot-container'),
+                ]
             ),
         ], start_collapsed=True, always_open=False),
     ],
@@ -1108,6 +1304,10 @@ app.layout = html.Div([
     Output('type-casting-feature-dropdown', 'options'),
     Output('drop-features-dropdown', 'options'),
     Output('transformations-base-features', 'options'),
+    Output('dist-plot-feature', 'options'),
+    Output('line-plot-features', 'options'),
+    Output('joint-plot-feature-x', 'options'),
+    Output('joint-plot-feature-y', 'options'),
     # Plots
     Output('missing-values-plot', 'figure'),
     # Inputs
@@ -1127,13 +1327,18 @@ def update_ui_components(_, data):
             features,
             features,
             features,
+            features,
+            features,
+            features,
+            features,
             # Plots
             go.Figure(
                 data=[
                     go.Bar(
                         x=missing_values.index,
                         y=missing_values.values,
-                        name='Number of Nulls'
+                        name='Number of Nulls',
+                        marker=dict(color='#37699b'),
                     ),
                 ],
                 layout=go.Layout(
