@@ -627,9 +627,34 @@ feature_importance = [
                             ],
                             style={'width': '100%'}
                         ),
+                        html.Div(style={'width': '20px'}),
+                        html.B('Target', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='boruta-shap-target',
+                            options=[],
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        html.B('Number of trials', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        html.Div([dcc.Slider(
+                            id='boruta-shap-n-trials',
+                            min=1,
+                            max=100,
+                            step=1,
+                            value=10,
+                            marks=None,
+                            tooltip={'always_visible': False, 'placement': 'bottom'},
+                        )], style={'width': '100%', 'margin-top': '10px'}),
                     ], style={'display': 'flex'}),
                     html.Div(style={'height': '10px'}),
-                    html.Div(id='boruta-shap-inputs-container'),
+                    dbc.Button(
+                        'Run Boruta SHAP',
+                        id='boruta-shap-run',
+                        color='primary',
+                        style={'width': '100%'},
+                    ),
                     html.Div(style={'height': '10px'}),
                     html.Div(id='boruta-shap-plot-container'),
                 ]
@@ -659,6 +684,25 @@ dimensionality_reduction = [
         dbc.Accordion([
             dbc.AccordionItem(
                 title='Matrix Decomposition',
+                children=[
+                    html.Div([
+                        html.B('Method', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='matrix-decomp-method',
+                            options=[
+                                {'label': 'PCA', 'value': 'pca'},
+                                {'label': 'Kernel PCA', 'value': 'kpca'},
+                                {'label': 'Truncated SVD', 'value': 'svd'},
+                            ],
+                            style={'width': '100%'}
+                        ),
+                    ], style={'display': 'flex'}),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='matrix-decomp-inputs-container'),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='matrix-decomp-plot-container'),
+                ]
             ),
             dbc.AccordionItem(
                 title='Manifold Learning',
@@ -689,9 +733,6 @@ hyperparameter_tuning = [
     html.H2('Hyperparameter Tuning'),
     dmc.Container([
         dbc.Accordion([
-            dbc.AccordionItem(
-                title='Grid Search',
-            ),
             dbc.AccordionItem(
                 title='Random Search',
             ),
@@ -792,6 +833,7 @@ app = DashProxy(
     __name__,
     external_stylesheets=external_stylesheets,
     prevent_initial_callbacks=True,
+    suppress_callback_exceptions=True,
     transforms=[MultiplexerTransform()],
     title='Quant Toolkit'
 )
@@ -1308,6 +1350,7 @@ app.layout = html.Div([
     Output('line-plot-features', 'options'),
     Output('joint-plot-feature-x', 'options'),
     Output('joint-plot-feature-y', 'options'),
+    Output('boruta-shap-target', 'options'),
     # Plots
     Output('missing-values-plot', 'figure'),
     # Inputs
@@ -1324,6 +1367,7 @@ def update_ui_components(_, data):
             data,
             [{"name": i, "id": i} for i in df.columns],
             # Feature Dropdowns
+            features,
             features,
             features,
             features,
