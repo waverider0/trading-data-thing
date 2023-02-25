@@ -1022,6 +1022,19 @@ forecasting = [
         dbc.Accordion([
             dbc.AccordionItem(
                 title='Forecasts',
+                children=[
+                    html.Div([
+                        html.B('Pre-compiled Models', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='live-predictions-model-dropdown',
+                            options=[],
+                            style={'width': '100%'}
+                        ),
+                    ], style={'display': 'flex'}),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='forecasting-outputs-container')
+                ]
             ),
         ], start_collapsed=True, always_open=False),
     ],

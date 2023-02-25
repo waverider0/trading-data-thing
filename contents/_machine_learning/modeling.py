@@ -673,7 +673,7 @@ def build_clf(
         save_temp_model(
             model.fit(df[features], df[target]),
             features,
-            'temp_model'
+            'temp_clf'
         )
 
         return [
@@ -807,7 +807,7 @@ def build_reg(
         save_temp_model(
             model.fit(df[features], df[target]),
             features,
-            'temp_model'
+            'temp_reg'
         )
 
         return [
@@ -1203,14 +1203,42 @@ def update_reg_plots(plot_type, modeling_results):
 
     raise PreventUpdate
 
-#def compile_model():
+@app.callback(
+    Output('live-predictions-model-dropdown', 'options'),
+    Input('compile-clf-model-button', 'n_clicks'),
+    State('clf-model-name', 'value'),
+)
+def compile_classifier(n_clicks, model_name):
+    if n_clicks:
+        dirname = os.path.dirname(os.path.dirname(__file__))
+        os.rename(
+            f'{dirname}/storage/temp/temp_clf',
+            f'{dirname}/storage/saved_models/{model_name}'
+        )
+        return get_saved_models()
+    raise PreventUpdate
+
+@app.callback(
+    Output('live-predictions-model-dropdown', 'options'),
+    Input('compile-reg-model-button', 'n_clicks'),
+    State('reg-model-name', 'value'),
+)
+def compile_regressor(n_clicks, model_name):
+    if n_clicks:
+        dirname = os.path.dirname(os.path.dirname(__file__))
+        os.rename(
+            f'{dirname}/storage/temp/temp_reg',
+            f'{dirname}/storage/saved_models/{model_name}'
+        )
+        return get_saved_models()
+    raise PreventUpdate
 
 
 # Helper Methods
 def save_temp_model(model, features, model_name):
     """ Saves the model and features used to train the model to a temp folder
     """
-    delete_temp_models()
+    delete_temp_models(model_name)
     dirname = os.path.dirname(os.path.dirname(__file__))
     features = [str(feature) for feature in features]
 
@@ -1222,13 +1250,3 @@ def save_temp_model(model, features, model_name):
     with open(f'{dirname}/storage/temp/{model_name}/features.txt', 'w') as f:
         f.write(','.join(features))
 
-def store_model(model_name):
-    """ 
-        Moves the model files from the temp folder
-        to the saved_models folder and renames the folder to the model name
-    """
-    dirname = os.path.dirname(__file__)
-    os.rename(
-        f'{dirname}/_storage/temp/temp_model',
-        f'{dirname}/_storage/saved_models/{model_name}'
-    )

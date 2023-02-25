@@ -7,12 +7,10 @@ import pandas as pd
 # Set dirname to folder containing this file
 dirname = os.path.dirname(__file__)
 
-def delete_temp_models():
-    """ Deletes all of the contents of the temp folder if there are any """
-    
+def delete_temp_models(model_name):
     if os.listdir(f'{dirname}/temp'):
-        for file in os.listdir(f'{dirname}/temp'):
-            shutil.rmtree(f'{dirname}/temp/{file}')
+        if os.path.exists(f'{dirname}/temp/{model_name}'):
+            shutil.rmtree(f'{dirname}/temp/{model_name}')
 
 def get_saved_models():
     """ Returns a list of all the saved models """
