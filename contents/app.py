@@ -735,18 +735,108 @@ hyperparameter_tuning = [
         dbc.Accordion([
             dbc.AccordionItem(
                 title='Random Search',
+                children=[
+                    html.Div([
+                        html.B('Model Type', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='rand-search-model-type',
+                            options=[
+                                {'label': 'Classification', 'value': 'clf'},
+                                {'label': 'Regression', 'value': 'reg'},
+                            ],
+                            style={'width': '100%'}
+                        ),
+                    ], style={'display': 'flex'}),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='rand-search-inputs-container'),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='rand-search-plot-container'),
+                ],
             ),
             dbc.AccordionItem(
                 title='Bayesian Search',
+                children=[
+                    html.Div([
+                        html.B('Model Type', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='bayes-search-model-type',
+                            options=[
+                                {'label': 'Classification', 'value': 'clf'},
+                                {'label': 'Regression', 'value': 'reg'},
+                            ],
+                            style={'width': '100%'}
+                        ),
+                    ], style={'display': 'flex'}),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='bayes-search-inputs-container'),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='bayes-search-plot-container'),
+                ],
             ),
             dbc.AccordionItem(
                 title='Evolutionary Search',
+                children=[
+                    html.Div([
+                        html.B('Model Type', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='evo-search-model-type',
+                            options=[
+                                {'label': 'Classification', 'value': 'clf'},
+                                {'label': 'Regression', 'value': 'reg'},
+                            ],
+                            style={'width': '100%'}
+                        ),
+                    ], style={'display': 'flex'}),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='evo-search-inputs-container'),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='evo-search-plot-container'),
+                ],
             ),
             dbc.AccordionItem(
                 title='Hyperopt',
+                children=[
+                    html.Div([
+                        html.B('Model Type', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='hyperopt-model-type',
+                            options=[
+                                {'label': 'Classification', 'value': 'clf'},
+                                {'label': 'Regression', 'value': 'reg'},
+                            ],
+                            style={'width': '100%'}
+                        ),
+                    ], style={'display': 'flex'}),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='hyperopt-inputs-container'),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='hyperopt-plot-container'),
+                ],
             ),
             dbc.AccordionItem(
                 title='Optuna',
+                children=[
+                    html.Div([
+                        html.B('Model Type', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='optuna-model-type',
+                            options=[
+                                {'label': 'Classification', 'value': 'clf'},
+                                {'label': 'Regression', 'value': 'reg'},
+                            ],
+                            style={'width': '100%'}
+                        ),
+                    ], style={'display': 'flex'}),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='optuna-inputs-container'),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='optuna-plot-container'),
+                ],
             ),
         ], start_collapsed=True, always_open=False),
     ],
@@ -773,9 +863,165 @@ modeling = [
         dbc.Accordion([
             dbc.AccordionItem(
                 title='Classification',
+                children=[
+                    html.Div([
+                        html.B('Target', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='clf-target',
+                            options=[],
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        html.B('Features', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='clf-features',
+                            options=[],
+                            multi=True,
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        html.B('Estimators', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='clf-estimators',
+                            options=[
+                                {'label': 'Logistic Regression', 'value': 'logreg'},
+                                {'label': 'Random Forest', 'value': 'rf'},
+                                {'label': 'XGBoost', 'value': 'xgb'},
+                            ],
+                            multi=True,
+                            style={'width': '100%'}
+                        ),
+                    ], style={'display': 'flex'}),
+                    html.Div(style={'height': '10px'}),
+                    html.Div([
+                        html.B('Scoring', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='clf-scoring',
+                            options=[
+                                {'label': 'Accuracy', 'value': 'accuracy'},
+                                {'label': 'Precision', 'value': 'precision'},
+                                {'label': 'Recall', 'value': 'recall'},
+                                {'label': 'F1', 'value': 'f1'},
+                            ],
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        html.B('CV', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='clf-cv',
+                            options=[
+                                {'label': 'KFold', 'value': 'kfold'},
+                                {'label': 'Stratified K-Fold', 'value': 'skfold'},
+                                {'label': 'Time Series Split', 'value': 'tssplit'},
+                                {'label': 'CPCV', 'value': 'cpcv'},
+                            ],
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        html.B('Probability Calibration', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='probability-calibration-method',
+                            options=[
+                                {'label': 'None', 'value': 'none'},
+                                {'label': 'Sigmoid', 'value': 'sigmoid'},
+                                {'label': 'Isotonic', 'value': 'isotonic'},
+                            ],
+                            style={'width': '100%'}
+                        ),
+                    ], style={'display': 'flex'}),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='clf-hyperparam-inputs-container'),
+                    html.Hr(),
+                    dbc.Button(
+                        'Build Model',
+                        id='build-clf-model',
+                        color='primary',
+                        style={'width': '100%'}
+                    ),
+                    html.Hr(),
+                    html.Div(id='clf-plots-container'),
+                ]
             ),
             dbc.AccordionItem(
                 title='Regression',
+                children=[
+                    html.Div([
+                        html.B('Target', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='reg-target',
+                            options=[],
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        html.B('Features', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='reg-features',
+                            options=[],
+                            multi=True,
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                    ], style={'display': 'flex'}),
+                    html.Div(style={'height': '10px'}),
+                    html.Div([
+                        html.B('Estimators', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='reg-estimators',
+                            options=[
+                                {'label': 'Linear Regression', 'value': 'linreg'},
+                                {'label': 'Random Forest', 'value': 'rf'},
+                                {'label': 'XGBoost', 'value': 'xgb'},
+                            ],
+                            multi=True,
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        html.B('Scoring', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='reg-scoring',
+                            options=[
+                                {'label': 'MAE', 'value': 'mae'},
+                                {'label': 'MSE', 'value': 'mse'},
+                                {'label': 'RMSE', 'value': 'rmse'},
+                                {'label': 'R2', 'value': 'r2'},
+                            ],
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        html.B('CV', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='reg-cv',
+                            options=[
+                                {'label': 'KFold', 'value': 'kfold'},
+                                {'label': 'Time Series Split', 'value': 'tssplit'},
+                                {'label': 'CPCV', 'value': 'cpcv'},
+                            ],
+                            style={'width': '100%'}
+                        ),
+                    ], style={'display': 'flex'}),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='reg-hyperparam-inputs-container'),
+                    html.Hr(),
+                    dbc.Button(
+                        'Build Model',
+                        id='build-reg-model',
+                        color='primary',
+                        style={'width': '100%'}
+                    ),
+                    html.Hr(),
+                    html.Div(id='reg-plots-container'),
+                ]
             ),
         ], start_collapsed=True, always_open=False),
     ],
@@ -1351,6 +1597,10 @@ app.layout = html.Div([
     Output('joint-plot-feature-x', 'options'),
     Output('joint-plot-feature-y', 'options'),
     Output('boruta-shap-target', 'options'),
+    Output('clf-target', 'options'),
+    Output('clf-features', 'options'),
+    Output('reg-target', 'options'),
+    Output('reg-features', 'options'),
     # Plots
     Output('missing-values-plot', 'figure'),
     # Inputs
@@ -1375,6 +1625,10 @@ def update_ui_components(_, data):
             features,
             features,
             features,
+            features,
+            [{'label': 'ALL FEATURES', 'value': 'ALL FEATURES'}] + features,
+            features,
+            [{'label': 'ALL FEATURES', 'value': 'ALL FEATURES'}] + features,
             # Plots
             go.Figure(
                 data=[
