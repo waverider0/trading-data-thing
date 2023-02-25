@@ -887,9 +887,9 @@ modeling = [
                         dcc.Dropdown(
                             id='clf-estimators',
                             options=[
-                                {'label': 'Logistic Regression', 'value': 'logreg'},
-                                {'label': 'Random Forest', 'value': 'rf'},
-                                {'label': 'XGBoost', 'value': 'xgb'},
+                                {'label': 'Logistic Regression', 'value': 'lr_clf'},
+                                {'label': 'Random Forest', 'value': 'rf_clf'},
+                                {'label': 'XGBoost', 'value': 'xgb_clf'},
                             ],
                             multi=True,
                             style={'width': '100%'}
@@ -897,19 +897,6 @@ modeling = [
                     ], style={'display': 'flex'}),
                     html.Div(style={'height': '10px'}),
                     html.Div([
-                        html.B('Scoring', style={'margin-top': '5px', 'white-space': 'nowrap'}),
-                        html.Div(style={'width': '10px'}),
-                        dcc.Dropdown(
-                            id='clf-scoring',
-                            options=[
-                                {'label': 'Accuracy', 'value': 'accuracy'},
-                                {'label': 'Precision', 'value': 'precision'},
-                                {'label': 'Recall', 'value': 'recall'},
-                                {'label': 'F1', 'value': 'f1'},
-                            ],
-                            style={'width': '100%'}
-                        ),
-                        html.Div(style={'width': '20px'}),
                         html.B('CV', style={'margin-top': '5px', 'white-space': 'nowrap'}),
                         html.Div(style={'width': '10px'}),
                         dcc.Dropdown(
@@ -926,7 +913,7 @@ modeling = [
                         html.B('Probability Calibration', style={'margin-top': '5px', 'white-space': 'nowrap'}),
                         html.Div(style={'width': '10px'}),
                         dcc.Dropdown(
-                            id='probability-calibration-method',
+                            id='calibration-method',
                             options=[
                                 {'label': 'None', 'value': 'none'},
                                 {'label': 'Sigmoid', 'value': 'sigmoid'},
@@ -945,7 +932,7 @@ modeling = [
                         style={'width': '100%'}
                     ),
                     html.Hr(),
-                    html.Div(id='clf-plots-container'),
+                    html.Div(id='clf-outputs-container'),
                 ]
             ),
             dbc.AccordionItem(
@@ -977,24 +964,11 @@ modeling = [
                         dcc.Dropdown(
                             id='reg-estimators',
                             options=[
-                                {'label': 'Linear Regression', 'value': 'linreg'},
-                                {'label': 'Random Forest', 'value': 'rf'},
-                                {'label': 'XGBoost', 'value': 'xgb'},
+                                {'label': 'Linear Regression', 'value': 'lr_reg'},
+                                {'label': 'Random Forest', 'value': 'rf_reg'},
+                                {'label': 'XGBoost', 'value': 'xgb_reg'},
                             ],
                             multi=True,
-                            style={'width': '100%'}
-                        ),
-                        html.Div(style={'width': '20px'}),
-                        html.B('Scoring', style={'margin-top': '5px', 'white-space': 'nowrap'}),
-                        html.Div(style={'width': '10px'}),
-                        dcc.Dropdown(
-                            id='reg-scoring',
-                            options=[
-                                {'label': 'MAE', 'value': 'mae'},
-                                {'label': 'MSE', 'value': 'mse'},
-                                {'label': 'RMSE', 'value': 'rmse'},
-                                {'label': 'R2', 'value': 'r2'},
-                            ],
                             style={'width': '100%'}
                         ),
                         html.Div(style={'width': '20px'}),
@@ -1020,7 +994,7 @@ modeling = [
                         style={'width': '100%'}
                     ),
                     html.Hr(),
-                    html.Div(id='reg-plots-container'),
+                    html.Div(id='reg-outputs-container'),
                 ]
             ),
         ], start_collapsed=True, always_open=False),
@@ -1089,7 +1063,8 @@ app.layout = html.Div([
     # storage and download
     dcc.Store(id='the-data'),
     dcc.Store(id='hyperparameter-search-results'),
-    dcc.Store(id='raw-modeling-results'),
+    dcc.Store(id='clf-results'),
+    dcc.Store(id='reg-results'),
     dcc.Download(id="to-csv"),
 
     # sidebar
