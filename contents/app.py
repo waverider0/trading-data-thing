@@ -144,6 +144,35 @@ add_features = [
                 ]
             ),
             dbc.AccordionItem(
+                title="Rename Features",
+                children=[
+                    html.Div([
+                        html.B('Feature', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='rename-features-dropdown',
+                            options=[],
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        html.B('New Name', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Input(
+                            id='feature-new-name',
+                            type='text',
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        dbc.Button(
+                            'Rename',
+                            id='rename-feature-button',
+                            color='primary',
+                            style={'width': '100%'}
+                        )
+                    ], style={'display': 'flex'}),
+                ]
+            ),
+            dbc.AccordionItem(
                 title="Transformations",
                 children=[
                     html.Div([
@@ -299,38 +328,6 @@ preprocessing = [
     ),
 ]
 
-price_charts = [
-    html.H2('Price Charts'),
-    dmc.Container([
-        dbc.Accordion([
-            dbc.AccordionItem(
-                title="Candlestick",
-            ),
-            dbc.AccordionItem(
-                title="Volume Profile",
-            ),
-            dbc.AccordionItem(
-                title="Time Price Opportunity",
-            ),
-        ], start_collapsed=True, always_open=False),
-    ],
-    id='price-charts-container',
-    fluid=True,
-    style={
-        'border-style': 'solid',
-        'border-color': 'grey',
-        'border-width': '1px',
-        'padding': '12px',
-    }
-    ),
-    dbc.Popover(
-        [],
-        target='price-charts-container',
-        trigger='hover',
-        hide_arrow=True,
-        id='price-charts-container-popover',
-    ),
-]
 distributions = [
     html.H2('Distributions'),
     dmc.Container([
@@ -433,31 +430,6 @@ statistical_association = [
     dmc.Container([
         dbc.Accordion([
             dbc.AccordionItem(
-                title="Line Plot",
-                children=[
-                    html.Div([
-                        html.B('Scale Data', style={'margin-top': '5px', 'white-space': 'nowrap'}),
-                        html.Div(style={'width': '5px'}),
-                        daq.BooleanSwitch(
-                            id='line-plot-scale-data',
-                            on=False,
-                            style={'margin-top': '5px'}
-                        ),
-                        html.Div(style={'width': '10px'}),
-                        html.B('Select Features', style={'margin-top': '5px', 'white-space': 'nowrap'}),
-                        html.Div(style={'width': '5px'}),
-                        dcc.Dropdown(
-                            id='line-plot-features',
-                            options=[],
-                            multi=True,
-                            style={'width': '100%'}
-                        ),
-                    ], style={'display': 'flex'}),
-                    html.Div(style={'height': '10px'}),
-                    html.Div(id='line-plot-container'),
-                ]
-            ),
-            dbc.AccordionItem(
                 title="Association Matrices",
                 children=[
                     html.Div([
@@ -516,6 +488,36 @@ statistical_association = [
             ),
             dbc.AccordionItem(
                 title="Heatmaps",
+                children=[
+                    html.Div([
+                        html.B('Feature X', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='heatmap-feature-x',
+                            options=[],
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        html.B('Feature Y', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='heatmap-feature-y',
+                            options=[],
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        html.B('Heat', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='heatmap-heat',
+                            options=[],
+                            style={'width': '100%'}
+                        ),
+                    ], style={'display': 'flex'}),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='heatmap-container'),
+                ]
+            
             ),
         ], start_collapsed=True, always_open=False),
     ],
@@ -545,7 +547,29 @@ temporal_sequence = [
                 title='Dynamic Time Warping',
             ),
             dbc.AccordionItem(
-                title='Stationarity Tests',
+                title="Line Plot",
+                children=[
+                    html.Div([
+                        html.B('Scale Data', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        daq.BooleanSwitch(
+                            id='line-plot-scale-data',
+                            on=False,
+                            style={'margin-top': '5px'}
+                        ),
+                        html.Div(style={'width': '10px'}),
+                        html.B('Select Features', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='line-plot-features',
+                            options=[],
+                            multi=True,
+                            style={'width': '100%'}
+                        ),
+                    ], style={'display': 'flex'}),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='line-plot-container'),
+                ]
             ),
             dbc.AccordionItem(
                 title='Feature Drift',
@@ -1262,28 +1286,6 @@ app.layout = html.Div([
                         }
                     ),
                 ], style={'display': 'flex', 'flex-direction': 'row', 'align-items': 'center', 'margin-top': '10px'}),
-                # price charts
-                dbc.Button(
-                    html.A([
-                        DashIconify(
-                            icon="iconoir:candlestick-chart",
-                            width=30,
-                            height=30,
-                        ),
-                        html.Span(style={"margin-left": "10px"}),
-                        "Price Charts",
-                    ], href='#price-charts', style={'color': 'white', 'text-decoration': 'none'}),
-                    outline=True,
-                    style={'textAlign': 'left', 'width': '100%'},
-                    id='navbutton-price-charts'
-                ),
-                dbc.Popover(
-                    [],
-                    target='navbutton-price-charts',
-                    trigger='hover',
-                    hide_arrow=True,
-                    id='price-charts-navbutton-popover',
-                ),
                 # distributions
                 dbc.Button(
                     html.A([
@@ -1549,13 +1551,6 @@ app.layout = html.Div([
             ),
             # Analysis Tools
             dmc.TimelineItem(
-                id='price-charts',
-                lineVariant='solid',
-                children=price_charts,
-                bullet=DashIconify(icon="iconoir:candlestick-chart", width=25, height=25),
-                style={'color': '#FFFFFF'},
-            ),
-            dmc.TimelineItem(
                 id='distributions',
                 lineVariant='solid',
                 children=distributions,
@@ -1637,11 +1632,15 @@ app.layout = html.Div([
     # Input Components
     Output('type-casting-feature-dropdown', 'options'),
     Output('drop-features-dropdown', 'options'),
+    Output('rename-features-dropdown', 'options'),
     Output('transformations-base-features', 'options'),
     Output('dist-plot-feature', 'options'),
     Output('line-plot-features', 'options'),
     Output('joint-plot-feature-x', 'options'),
     Output('joint-plot-feature-y', 'options'),
+    Output('heatmap-feature-x', 'options'),
+    Output('heatmap-feature-y', 'options'),
+    Output('heatmap-heat', 'options'),
     Output('drift-plot-feature', 'options'),
     Output('drift-plot-n-splits', 'max'),
     Output('boruta-shap-target', 'options'),
@@ -1667,11 +1666,15 @@ def update_ui_components(_, data):
             # Input Components
             features, # type-casting-feature-dropdown
             features, # drop-features-dropdown
+            features, # rename-features-dropdown
             features, # transformations-base-features
             features, # dist-plot-feature
             features, # line-plot-features
             features, # joint-plot-feature-x
             features, # joint-plot-feature-y
+            features, # heatmap-feature-x
+            features, # heatmap-feature-y
+            [{'label': 'Density', 'value': 'density'}] + features, # heatmap-heat
             features, # drift-plot-feature
             math.floor(len(df.index) / 2), # drift-plot-n-splits
             features, # boruta-shap-target

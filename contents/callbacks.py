@@ -3,7 +3,6 @@ from contents._data.add_features import *
 from contents._data.preprocessing import *
 
 from contents._analysis_tools.distributions import *
-from contents._analysis_tools.price_charts import *
 from contents._analysis_tools.statistical_association import *
 from contents._analysis_tools.temporal_sequence import *
 

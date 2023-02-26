@@ -5,6 +5,7 @@ from sklearn.preprocessing import MinMaxScaler
 
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
+import plotly.express as px
 
 from contents.app import *
 
@@ -83,8 +84,8 @@ def render_association_matrix(scale_data, metric, data):
     Input('joint-plot-feature-y', 'value'),
     State('the-data', 'data')
 )
-def render_joint_plot(feature_1, feature_2, data):
-    if feature_1 and feature_2 and data:
+def render_joint_plot(feature_x, feature_y, data):
+    if feature_x and feature_y and data:
         df = pd.DataFrame.from_dict(data)
         return [
             dcc.Graph(
@@ -92,24 +93,24 @@ def render_joint_plot(feature_1, feature_2, data):
                 figure=go.Figure(
                     data=[
                         go.Scatter(
-                            x=df[feature_1],
-                            y=df[feature_2],
+                            x=df[feature_x],
+                            y=df[feature_y],
                             mode='markers',
                             name='Data',
                             marker=dict(color='#37699b'),
                         ),
                         go.Scatter(
-                            x=df[feature_1],
-                            y=df[feature_1] * df[feature_1].corr(df[feature_2]) + df[feature_2].mean() - df[feature_1].mean() * df[feature_1].corr(df[feature_2]),
+                            x=df[feature_x],
+                            y=df[feature_x] * df[feature_x].corr(df[feature_y]) + df[feature_y].mean() - df[feature_x].mean() * df[feature_x].corr(df[feature_y]),
                             mode='lines',
                             line=dict(color='orange'),
                             name='OLS',
                         ),
                     ],
                     layout=go.Layout(
-                        title=f'{feature_1} vs {feature_2}',
-                        xaxis_title=feature_1,
-                        yaxis_title=feature_2,
+                        title=f'{feature_x} vs {feature_y}',
+                        xaxis_title=feature_x,
+                        yaxis_title=feature_x,
                         paper_bgcolor='rgba(0,0,0,0)',
                         plot_bgcolor='rgba(0,0,0,0)',
                         font=dict(color='#FFFFFF'),
@@ -127,6 +128,86 @@ def render_joint_plot(feature_1, feature_2, data):
         ]
     raise PreventUpdate
 
+@app.callback(
+    Output('heatmap-container', 'children'),
+    Input('heatmap-feature-x', 'value'),
+    Input('heatmap-feature-y', 'value'),
+    Input('heatmap-heat', 'value'),
+    State('the-data', 'data')
+)
+def render_heatmap(feature_x, feature_y, heat, data):
+    if feature_x and feature_y and heat and data:
+        df = pd.DataFrame.from_dict(data)
+        if heat == 'density':
+            return [
+                dcc.Graph(
+                    figure={
+                        'data': [go.Histogram2d(
+                            x=df[feature_x],
+                            y=df[feature_y],
+                            autobinx=True,
+                            autobiny=True,
+                            zsmooth = 'best',
+                            histfunc='count',
+                            colorscale='thermal',
+                            reversescale=False,
+                            colorbar=dict(title='Density')
+                        )],
+                        'layout': go.Layout(
+                            title=f'Density ({feature_x} vs {feature_y})',
+                            xaxis_title=feature_x,
+                            yaxis_title=feature_y,
+                            paper_bgcolor='rgba(0,0,0,0)',
+                            plot_bgcolor='rgba(0,0,0,0)',
+                            font=dict(color='#FFFFFF'),
+                            xaxis=dict(
+                                titlefont=dict(color='#FFFFFF'),
+                                showgrid=False,
+                            ),
+                            yaxis=dict(
+                                titlefont=dict(color='#FFFFFF'),
+                                showgrid=False,
+                            ),
+                        ),
+                    }
+                )
+            ]
+        else:
+            return [
+                dcc.Graph(
+                    figure={
+                        'data': [go.Histogram2d(
+                            x=df[feature_x],
+                            y=df[feature_y],
+                            z=df[heat],
+                            autobinx=True,
+                            autobiny=True,
+                            histfunc='avg',
+                            zsmooth = 'best',
+                            colorscale='thermal',
+                            reversescale=False,
+                            colorbar=dict(title=heat)
+                        )],
+                        'layout': go.Layout(
+                            title=f'{feature_x} vs {feature_y} vs {heat}',
+                            xaxis_title=feature_x,
+                            yaxis_title=feature_y,
+                            paper_bgcolor='rgba(0,0,0,0)',
+                            plot_bgcolor='rgba(0,0,0,0)',
+                            font=dict(color='#FFFFFF'),
+                            xaxis=dict(
+                                titlefont=dict(color='#FFFFFF'),
+                                showgrid=False,
+                            ),
+                            yaxis=dict(
+                                titlefont=dict(color='#FFFFFF'),
+                                showgrid=False,
+                            ),
+                        ),
+                    }
+                )
+            ]
+    raise PreventUpdate
 
 # Helper Methods
 def normalize_df(df):

@@ -24,6 +24,21 @@ def drop_features(n_clicks, features, data):
 @app.callback(
     Output('the-data', 'data'),
     Output('hidden-div', 'children'),
+    Input('rename-feature-button', 'n_clicks'),
+    State('rename-features-dropdown', 'value'),
+    State('feature-new-name', 'value'),
+    State('the-data', 'data'),
+)
+def rename_feature(n_clicks, feature, new_name, data):
+    if n_clicks and feature and new_name and data:
+        df = pd.DataFrame.from_dict(data)
+        df = df.rename(columns={feature: new_name})
+        return df.to_dict('records'), ''
+    raise PreventUpdate
+
+@app.callback(
+    Output('the-data', 'data'),
+    Output('hidden-div', 'children'),
     Input('add-features-button', 'n_clicks'),
     State('transformations-dropdown', 'value'),
     State('transformations-input', 'value'),
@@ -44,17 +59,17 @@ def add_transformation(n_clicks, transformations, input, base_features, data):
                 elif transformation == 'abs':
                     df[f'Abs({base_feature})'] = np.abs(df[base_feature])
                 elif transformation == 'pct_change':
-                    df[f'{base_feature} Percent Change'] = df[base_feature].pct_change(input)
+                    df[f'PctChange{input}({base_feature})'] = df[base_feature].pct_change(input)
                 elif transformation == 'log_ret':
-                    df[f'{base_feature} Log Return'] = np.log(df[base_feature]) - np.log(df[base_feature].shift(input))
+                    df[f'LogRet{input}({base_feature})'] = np.log(df[base_feature]) - np.log(df[base_feature].shift(input))
                 elif transformation == 'min':
                     df[f'Min{input}({base_feature})'] = df[base_feature].rolling(input).min()
                 elif transformation == 'max':
                     df[f'Max{input}({base_feature})'] = df[base_feature].rolling(input).max()
                 elif transformation == 'min_pos':
-                    df[f'MinPos{input}({base_feature})'] = df[base_feature].rolling(input).apply(lambda x: np.argmin(x) + 1)
+                    df[f'MinPos{input}({base_feature})'] = input - df[base_feature].rolling(input).apply(lambda x: np.argmin(x) + 1)
                 elif transformation == 'max_pos':
-                    df[f'MaxPos{input}({base_feature})'] = df[base_feature].rolling(input).apply(lambda x: np.argmax(x) + 1)
+                    df[f'MaxPos{input}({base_feature})'] = input - df[base_feature].rolling(input).apply(lambda x: np.argmax(x) + 1)
                 elif transformation == 'sum':
                     df[f'Sum{input}({base_feature})'] = df[base_feature].rolling(input).sum()
                 elif transformation == 'sma':
