@@ -14,6 +14,8 @@ import dash_mantine_components as dmc
 from dash_iconify import DashIconify
 import plotly.graph_objs as go
 
+from contents.storage.utils import get_saved_models
+
 
 ##################
 # Module Layouts #
@@ -1027,13 +1029,29 @@ forecasting = [
                         html.B('Pre-compiled Models', style={'margin-top': '5px', 'white-space': 'nowrap'}),
                         html.Div(style={'width': '10px'}),
                         dcc.Dropdown(
-                            id='live-predictions-model-dropdown',
-                            options=[],
+                            id='pre-compiled-models',
+                            options=get_saved_models(),
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        dbc.Button(
+                            '🗑️ Delete Model',
+                            id='delete-model',
+                            color='primary',
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        dbc.Button(
+                            '🚀 Generate Forecast',
+                            id='generate-forecast',
+                            color='primary',
                             style={'width': '100%'}
                         ),
                     ], style={'display': 'flex'}),
                     html.Div(style={'height': '10px'}),
-                    html.Div(id='forecasting-outputs-container')
+                    html.Div(id='forecast-features-container'),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='forecast-results')
                 ]
             ),
         ], start_collapsed=True, always_open=False),

@@ -1204,7 +1204,7 @@ def update_reg_plots(plot_type, modeling_results):
     raise PreventUpdate
 
 @app.callback(
-    Output('live-predictions-model-dropdown', 'options'),
+    Output('pre-compiled-models', 'options'),
     Input('compile-clf-model-button', 'n_clicks'),
     State('clf-model-name', 'value'),
 )
@@ -1219,7 +1219,7 @@ def compile_classifier(n_clicks, model_name):
     raise PreventUpdate
 
 @app.callback(
-    Output('live-predictions-model-dropdown', 'options'),
+    Output('pre-compiled-models', 'options'),
     Input('compile-reg-model-button', 'n_clicks'),
     State('reg-model-name', 'value'),
 )
@@ -1231,6 +1231,31 @@ def compile_regressor(n_clicks, model_name):
             f'{dirname}/storage/saved_models/{model_name}'
         )
         return get_saved_models()
+    raise PreventUpdate
+
+@app.callback(
+    Output('clf-outputs-container', 'children'),
+    Input('clf-target', 'value'),
+    Input('clf-features', 'value'),
+    Input('clf-estimators', 'value'),
+    Input('clf-cv', 'value'),
+    Input('calibration-method', 'value'),
+)
+def clear_clf_outputs_container(target, features, estimators, cv, calibration_method):
+    if target or features or estimators or cv or calibration_method:
+        return ''
+    raise PreventUpdate
+
+@app.callback(
+    Output('reg-outputs-container', 'children'),
+    Input('reg-target', 'value'),
+    Input('reg-features', 'value'),
+    Input('reg-estimators', 'value'),
+    Input('reg-cv', 'value'),
+)
+def clear_reg_outputs_container(target, features, estimators, cv):
+    if target or features or estimators or cv:
+        return ''
     raise PreventUpdate
 
 

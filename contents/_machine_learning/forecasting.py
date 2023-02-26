@@ -15,6 +15,12 @@ import numpy as np
 from contents.app import *
 from contents.storage.utils import get_saved_models
 
+
+@app.callback(
+    Output('forecast-features-container', 'children'),
+    Output('forecast-results', 'children'),
+    Input('pre-compiled-models', 'value'),
+)
 def update_forecast_inputs(model_name):
     if model_name:
         try:  _, features = load_model(model_name)
@@ -28,7 +34,7 @@ def update_forecast_inputs(model_name):
             children.append(html.Div([
                 dcc.Input(
                     id={
-                        'type': 'forecast-model-input',
+                        'type': 'forecast-features',
                         'index': feature
                     },
                     type='number',
@@ -38,7 +44,52 @@ def update_forecast_inputs(model_name):
                 ),
                 html.Div(style={'width': '10px'}),
             ], style={'display': 'inline-block', 'width': '50%'}))
+
+        return children, ''
             
+    raise PreventUpdate
+
+@app.callback(
+    Output('forecast-results', 'children'),
+    Input('generate-forecast', 'n_clicks'),
+    State('pre-compiled-models', 'value'),
+    State({'type': 'forecast-features', 'index': ALL}, 'value'),
+)
+def generate_forecast(n_clicks, model_name, feature_values):
+    if n_clicks and model_name and feature_values:
+        model, _ = load_model(model_name)
+        X = np.array(feature_values).reshape(1, -1)
+
+        children = []
+        forecast = model.predict(X)
+        children.append(html.Div([
+            html.B('Forecast:'),
+            html.Div(style={'width': '10px'}),
+            html.Div(forecast)
+        ], style={'display': 'flex'}))
+        try:
+            children.append(html.Div([
+                html.B('Probability:'),
+                html.Div(style={'width': '10px'}),
+                html.Div(model.predict_proba(X)[0][forecast])
+            ], style={'display': 'flex'}))
+        except:
+            pass
+
+        return children
+
+    raise PreventUpdate
+
+@app.callback(
+    Output('pre-compiled-models', 'options'),
+    Output('forecast-results', 'children'),
+    Input('delete-model', 'n_clicks'),
+    State('pre-compiled-models', 'value')
+)
+def delete_selected_model(n_clicks, selected_model):
+    if n_clicks and selected_model:
+        delete_model(selected_model)
+        return get_saved_models(), ''
     raise PreventUpdate
 
 
