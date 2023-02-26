@@ -131,13 +131,15 @@ def render_joint_plot(feature_x, feature_y, data):
     Output('heatmap-container', 'children'),
     Input('heatmap-feature-x', 'value'),
     Input('heatmap-feature-y', 'value'),
-    Input('heatmap-heat', 'value'),
+    Input('heatmap-magnitude', 'value'),
+    Input('heatmap-colorscale', 'value'),
+    Input('heatmap-reverse-colorscale', 'on'),
     State('the-data', 'data')
 )
-def render_heatmap(feature_x, feature_y, heat, data):
-    if feature_x and feature_y and heat and data:
+def render_heatmap(feature_x, feature_y, magnitude, colorscale, reverse, data):
+    if feature_x and feature_y and magnitude and colorscale and data:
         df = pd.DataFrame.from_dict(data)
-        if heat == 'density':
+        if magnitude == 'density':
             return [
                 dcc.Graph(
                     figure={
@@ -148,8 +150,8 @@ def render_heatmap(feature_x, feature_y, heat, data):
                             autobiny=True,
                             zsmooth = 'best',
                             histfunc='count',
-                            colorscale='thermal',
-                            reversescale=False,
+                            colorscale=colorscale,
+                            reversescale=reverse,
                             colorbar=dict(title='Density')
                         )],
                         'layout': go.Layout(
@@ -178,17 +180,17 @@ def render_heatmap(feature_x, feature_y, heat, data):
                         'data': [go.Histogram2d(
                             x=df[feature_x],
                             y=df[feature_y],
-                            z=df[heat],
+                            z=df[magnitude],
                             autobinx=True,
                             autobiny=True,
                             histfunc='avg',
                             zsmooth = 'best',
-                            colorscale='thermal',
-                            reversescale=False,
-                            colorbar=dict(title=heat)
+                            colorscale=colorscale,
+                            reversescale=reverse,
+                            colorbar=dict(title=magnitude)
                         )],
                         'layout': go.Layout(
-                            title=f'{feature_x} vs {feature_y} vs {heat}',
+                            title=f'{feature_x} vs {feature_y} vs {magnitude}',
                             xaxis_title=feature_x,
                             yaxis_title=feature_y,
                             paper_bgcolor='rgba(0,0,0,0)',
@@ -207,6 +209,7 @@ def render_heatmap(feature_x, feature_y, heat, data):
                 )
             ]
     raise PreventUpdate
+
 
 # Helper Methods
 def normalize_df(df):

@@ -89,39 +89,6 @@ add_features = [
     dmc.Container([
         dbc.Accordion([
             dbc.AccordionItem(
-                title="Type Casting",
-                children=html.Div([
-                    html.B('Feature', style={'margin-top': '5px', 'white-space': 'nowrap'}),
-                    html.Div(style={'width': '10px'}),
-                    dcc.Dropdown(
-                        id='type-casting-feature-dropdown',
-                        options=[{'label': i, 'value': i} for i in []],
-                        style={'width': '100%'}
-                    ),
-                    html.Div(style={'width': '30px'}),
-                    html.B('Type', style={'margin-top': '5px', 'white-space': 'nowrap'}),
-                    html.Div(style={'width': '10px'}),
-                    dcc.Dropdown(
-                        id='type-casting-type-dropdown',
-                        options=[
-                            {'label': 'Integer', 'value': 'int'},
-                            {'label': 'Float', 'value': 'float'},
-                            {'label': 'String', 'value': 'str'},
-                            {'label': 'Boolean', 'value': 'bool'},
-                            {'label': 'Datetime', 'value': 'datetime'},
-                        ],
-                        style={'width': '100%'}
-                    ),
-                    html.Div(style={'width': '30px'}),
-                    dbc.Button(
-                        'Apply',
-                        id='type-casting-apply-button',
-                        color='primary',
-                        style={'width': '100%'}
-                    )
-                ], style={'display': 'flex'})
-            ),
-            dbc.AccordionItem(
                 title="Drop Features",
                 children=[
                     html.Div([
@@ -166,6 +133,71 @@ add_features = [
                         dbc.Button(
                             'Rename',
                             id='rename-feature-button',
+                            color='primary',
+                            style={'width': '100%'}
+                        )
+                    ], style={'display': 'flex'}),
+                ]
+            ),
+            dbc.AccordionItem(
+                title="Type Casting",
+                children=html.Div([
+                    html.B('Feature', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                    html.Div(style={'width': '10px'}),
+                    dcc.Dropdown(
+                        id='type-casting-feature-dropdown',
+                        options=[{'label': i, 'value': i} for i in []],
+                        style={'width': '100%'}
+                    ),
+                    html.Div(style={'width': '30px'}),
+                    html.B('Type', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                    html.Div(style={'width': '10px'}),
+                    dcc.Dropdown(
+                        id='type-casting-type-dropdown',
+                        options=[
+                            {'label': 'Integer', 'value': 'int'},
+                            {'label': 'Float', 'value': 'float'},
+                            {'label': 'String', 'value': 'str'},
+                            {'label': 'Boolean', 'value': 'bool'},
+                            {'label': 'Datetime', 'value': 'datetime'},
+                        ],
+                        style={'width': '100%'}
+                    ),
+                    html.Div(style={'width': '30px'}),
+                    dbc.Button(
+                        'Apply',
+                        id='type-casting-apply-button',
+                        color='primary',
+                        style={'width': '100%'}
+                    )
+                ], style={'display': 'flex'})
+            ),
+            dbc.AccordionItem(
+                title="Order By",
+                children=[
+                    html.Div([
+                        html.B('Feature', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='order-by-feature-dropdown',
+                            options=[],
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '30px'}),
+                        html.B('Order', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='order-by-order-dropdown',
+                            options=[
+                                {'label': 'Ascending', 'value': 'ascending'},
+                                {'label': 'Descending', 'value': 'descending'},
+                            ],
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '30px'}),
+                        dbc.Button(
+                            'Apply',
+                            id='order-by-apply-button',
                             color='primary',
                             style={'width': '100%'}
                         )
@@ -506,12 +538,36 @@ statistical_association = [
                             style={'width': '100%'}
                         ),
                         html.Div(style={'width': '20px'}),
-                        html.B('Heat', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.B('Magnitude', style={'margin-top': '5px', 'white-space': 'nowrap'}),
                         html.Div(style={'width': '5px'}),
                         dcc.Dropdown(
-                            id='heatmap-heat',
+                            id='heatmap-magnitude',
                             options=[],
                             style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        html.B('Colorscale', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='heatmap-colorscale',
+                            options=[
+                                {'label': 'Thermal', 'value': 'thermal'},
+                                {'label': 'Viridis', 'value': 'viridis'},
+                                {'label': 'Portland', 'value': 'portland'},
+                                {'label': 'Spectral', 'value': 'spectral'},
+                                {'label': 'Red/Green', 'value': 'piyg'},
+                                {'label': 'Red/Blue', 'value': 'RdBu'},
+                            ],
+                            value='thermal',
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        html.B('Reverse Colorscale', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        daq.BooleanSwitch(
+                            id='heatmap-reverse-colorscale',
+                            on=False,
+                            style={'margin-top': '5px'}
                         ),
                     ], style={'display': 'flex'}),
                     html.Div(style={'height': '10px'}),
@@ -1630,9 +1686,10 @@ app.layout = html.Div([
     Output('datatable', 'data'),
     Output('datatable', 'columns'),
     # Input Components
-    Output('type-casting-feature-dropdown', 'options'),
     Output('drop-features-dropdown', 'options'),
     Output('rename-features-dropdown', 'options'),
+    Output('type-casting-feature-dropdown', 'options'),
+    Output('order-by-feature-dropdown', 'options'),
     Output('transformations-base-features', 'options'),
     Output('dist-plot-feature', 'options'),
     Output('line-plot-features', 'options'),
@@ -1640,7 +1697,7 @@ app.layout = html.Div([
     Output('joint-plot-feature-y', 'options'),
     Output('heatmap-feature-x', 'options'),
     Output('heatmap-feature-y', 'options'),
-    Output('heatmap-heat', 'options'),
+    Output('heatmap-magnitude', 'options'),
     Output('drift-plot-feature', 'options'),
     Output('drift-plot-n-splits', 'max'),
     Output('boruta-shap-target', 'options'),
@@ -1664,9 +1721,10 @@ def update_ui_components(_, data):
             data,
             [{"name": i, "id": i} for i in df.columns],
             # Input Components
-            features, # type-casting-feature-dropdown
             features, # drop-features-dropdown
             features, # rename-features-dropdown
+            features, # type-casting-feature-dropdown
+            [{'label': 'Index', 'value': 'index'}] + features, # order-by-feature-dropdown
             features, # transformations-base-features
             features, # dist-plot-feature
             features, # line-plot-features
@@ -1674,7 +1732,7 @@ def update_ui_components(_, data):
             features, # joint-plot-feature-y
             features, # heatmap-feature-x
             features, # heatmap-feature-y
-            [{'label': 'Density', 'value': 'density'}] + features, # heatmap-heat
+            [{'label': 'Density', 'value': 'density'}] + features, # heatmap-magnitude
             features, # drift-plot-feature
             math.floor(len(df.index) / 2), # drift-plot-n-splits
             features, # boruta-shap-target

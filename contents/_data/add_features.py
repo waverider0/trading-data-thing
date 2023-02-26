@@ -39,6 +39,26 @@ def rename_feature(n_clicks, feature, new_name, data):
 @app.callback(
     Output('the-data', 'data'),
     Output('hidden-div', 'children'),
+    Input('order-by-apply-button', 'n_clicks'),
+    State('order-by-feature-dropdown', 'value'),
+    State('order-by-order-dropdown', 'value'),
+    State('the-data', 'data')
+)
+def order_by(n_clicks, feature, order, data):
+    if n_clicks and feature and order and data:
+        if feature == 'index':
+            df = pd.DataFrame.from_dict(data)
+            df = df.sort_index(ascending=order=='ascending')
+            return df.to_dict('records'), ''
+        else:
+            df = pd.DataFrame.from_dict(data)
+            df = df.sort_values(feature, ascending=order=='ascending')
+            return df.to_dict('records'), ''
+    raise PreventUpdate
+
+@app.callback(
+    Output('the-data', 'data'),
+    Output('hidden-div', 'children'),
     Input('add-features-button', 'n_clicks'),
     State('transformations-dropdown', 'value'),
     State('transformations-input', 'value'),
