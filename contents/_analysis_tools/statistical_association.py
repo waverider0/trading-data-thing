@@ -110,7 +110,7 @@ def render_joint_plot(feature_x, feature_y, data):
                     layout=go.Layout(
                         title=f'{feature_x} vs {feature_y}',
                         xaxis_title=feature_x,
-                        yaxis_title=feature_x,
+                        yaxis_title=feature_y,
                         paper_bgcolor='rgba(0,0,0,0)',
                         plot_bgcolor='rgba(0,0,0,0)',
                         font=dict(color='#FFFFFF'),
