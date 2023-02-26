@@ -5,7 +5,6 @@ from sklearn.preprocessing import MinMaxScaler
 
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
-import plotly.express as px
 
 from contents.app import *
 
