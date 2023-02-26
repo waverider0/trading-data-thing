@@ -1,3 +1,4 @@
+import math
 import os
 import pandas as pd
 
@@ -548,6 +549,45 @@ temporal_sequence = [
             ),
             dbc.AccordionItem(
                 title='Feature Drift',
+                children=[
+                    html.Div([
+                        html.B('Test', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='drift-plot-test',
+                            options=[
+                                {'label': 'None', 'value': 'none'},
+                                {'label': 'Kolmogorov-Smirnov', 'value': 'ks'},
+                                {'label': 'Cramer-von Mises', 'value': 'cvm'},
+                            ],
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        html.B('Feature', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='drift-plot-feature',
+                            options=[],
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        html.B('N Splits', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        html.Div([
+                            dcc.Slider(
+                                id='drift-plot-n-splits',
+                                min=2,
+                                max=10,
+                                step=1,
+                                value=5,
+                                marks=None,
+                                tooltip={'always_visible': False, 'placement': 'bottom'},
+                            ),
+                        ], style={'width': '100%', 'margin-top': '10px'}),
+                    ], style={'display': 'flex'}),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='drift-plot-container'),
+                ]
             ),
         ], start_collapsed=True, always_open=False),
     ],
@@ -1594,7 +1634,7 @@ app.layout = html.Div([
     # Table
     Output('datatable', 'data'),
     Output('datatable', 'columns'),
-    # Feature Dropdowns
+    # Input Components
     Output('type-casting-feature-dropdown', 'options'),
     Output('drop-features-dropdown', 'options'),
     Output('transformations-base-features', 'options'),
@@ -1602,6 +1642,8 @@ app.layout = html.Div([
     Output('line-plot-features', 'options'),
     Output('joint-plot-feature-x', 'options'),
     Output('joint-plot-feature-y', 'options'),
+    Output('drift-plot-feature', 'options'),
+    Output('drift-plot-n-splits', 'max'),
     Output('boruta-shap-target', 'options'),
     Output('clf-target', 'options'),
     Output('clf-features', 'options'),
@@ -1622,19 +1664,21 @@ def update_ui_components(_, data):
             # Table
             data,
             [{"name": i, "id": i} for i in df.columns],
-            # Feature Dropdowns
-            features,
-            features,
-            features,
-            features,
-            features,
-            features,
-            features,
-            features,
-            features,
-            [{'label': 'ALL FEATURES', 'value': 'ALL FEATURES'}] + features,
-            features,
-            [{'label': 'ALL FEATURES', 'value': 'ALL FEATURES'}] + features,
+            # Input Components
+            features, # type-casting-feature-dropdown
+            features, # drop-features-dropdown
+            features, # transformations-base-features
+            features, # dist-plot-feature
+            features, # line-plot-features
+            features, # joint-plot-feature-x
+            features, # joint-plot-feature-y
+            features, # drift-plot-feature
+            math.floor(len(df.index) / 2), # drift-plot-n-splits
+            features, # boruta-shap-target
+            features, # clf-target
+            [{'label': 'ALL FEATURES', 'value': 'ALL FEATURES'}] + features, # clf-features
+            features, # reg-target
+            [{'label': 'ALL FEATURES', 'value': 'ALL FEATURES'}] + features, # reg-features
             # Plots
             go.Figure(
                 data=[
