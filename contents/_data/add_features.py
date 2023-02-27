@@ -122,3 +122,65 @@ def add_transformation(n_clicks, transformations, input, base_features, data):
 
     raise PreventUpdate
 
+@app.callback(
+    Output('the-data', 'data'),
+    Output('hidden-div', 'children'),
+    Input('add-ohlcv-features-button', 'n_clicks'),
+    State('open-feature-dropdown', 'value'),
+    State('high-feature-dropdown', 'value'),
+    State('low-feature-dropdown', 'value'),
+    State('close-feature-dropdown', 'value'),
+    State('volume-feature-dropdown', 'value'),
+    State('ohlcv-features-dropdown', 'value'),
+    State('ohlcv-features-window', 'value'),
+    State('the-data', 'data'),
+)
+def add_ohlcv_features(n_clicks, open, high, low, close, volume, features, window, data):
+    if n_clicks and open and high and low and close and volume and features and window and data:
+        df = pd.DataFrame.from_dict(data)
+        for feature in features:
+            if feature == 'rsi':
+                pass
+            elif feature == 'atr':
+                pass
+            elif feature == 'c2c_vol':
+                df[f'C2CVol{window}'] = (np.log(df[close]) - np.log(df[close].shift(1))).rolling(window).std()
+            elif feature == 'parkinson_vol':
+                h_l = np.log(df[high] / df[low]) ** 2
+                df[f'ParkinsonVol{window}'] = h_l.rolling(window).apply(
+                    lambda x: np.sqrt((1 / (4 * window * np.log(2))) * np.sum(x))
+                )
+            elif feature == 'garman_klass_vol':
+                h_l = (
+                    (np.log(df[high] / df[low]) ** 2) / 2
+                ).rolling(window).mean()
+                c = (
+                    2 * np.log(2) - 1) * (np.log(df[close] / df[close].shift()) ** 2
+                ).rolling(window).mean()
+                df[f'GarmanKlassVol{window}'] = np.sqrt(h_l - c)
+            elif feature == 'rodgers_satchell_vol':
+                x = (
+                    (np.log(df[high] / df[close]) * np.log(df[high] / df[open])) +\
+                    (np.log(df[low] / df[close]) * np.log(df[low] / df[open]))
+                )
+                df[f'RodgersSatchellVol{window}'] = np.sqrt(x.rolling(window).mean())
+            elif feature == 'yang_zhang_vol':
+                o = ((
+                    np.log(df[open] / df[open].shift()) -\
+                    np.log(df[open] / df[open].shift()).rolling(window).mean()
+                ) ** 2).rolling(window).apply(lambda x: (1 / (window -  1)) * np.sum(x))
+                c = ((
+                    np.log(df[close] / df[close].shift()) -\
+                    np.log(df[close] / df[close].shift()).rolling(window).mean()
+                ) ** 2).rolling(window).apply(lambda x: (1 / (window -  1)) * np.sum(x))
+                rs = (
+                    (np.log(df[high] / df[close]) * np.log(df[high] / df[open])) +\
+                    (np.log(df[low] / df[close]) * np.log(df[low] / df[open]))
+                ).rolling(window).mean()
+                k = 0.34 / (1.34 + (window + 1) / (window - 1))
+                df[f'YangZhangVol{window}'] = np.sqrt(o + k * c + (1 - k) * rs)
+        return df.to_dict('records'), ''
+    raise PreventUpdate
+
+
+# Helper Methods

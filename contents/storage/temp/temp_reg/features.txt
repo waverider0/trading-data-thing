@@ -1,0 +1,1 @@
+Price,Volume,Min15(Volume),Max15(Volume),Std15(Volume),Skew15(Volume),Kurt15(Volume),Volatility

@@ -222,6 +222,7 @@ add_features = [
                         dcc.Dropdown(
                             id='transformations-dropdown',
                             options=[
+                                {'label': 'Lag', 'value': 'lag'},
                                 {'label': 'Nth Power', 'value': 'nth_power'},
                                 {'label': 'Nth Root', 'value': 'nth_root'},
                                 {'label': 'Nth Derivative', 'value': 'nth_deriv'},
@@ -245,7 +246,8 @@ add_features = [
                                 {'label': 'Rolling Z-Score', 'value': 'z_score'},
                                 {'label': 'Rolling Correlation', 'value': 'corr'},
                                 {'label': 'Rolling Autocorrelation', 'value': 'autocorr'},
-                                {'label': 'Lag', 'value': 'lag'},
+                                #{'label': 'CUSUM Filter', 'value': 'cusum'},
+                                {'label': 'Kalman Filter', 'value': 'kalman'},
                             ],
                             multi=True,
                             style={'width': '100%'}
@@ -271,6 +273,91 @@ add_features = [
             ),
             dbc.AccordionItem(
                 title="OHLCV Features",
+                children=[
+                    html.Div([
+                        html.B('Open', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='open-feature-dropdown',
+                            options=[],
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '30px'}),
+                        html.B('High', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='high-feature-dropdown',
+                            options=[],
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '30px'}),
+                        html.B('Low', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='low-feature-dropdown',
+                            options=[],
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '30px'}),
+                        html.B('Close', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='close-feature-dropdown',
+                            options=[],
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '30px'}),
+                        html.B('Volume', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='volume-feature-dropdown',
+                            options=[],
+                            style={'width': '100%'}
+                        ),
+                    ], style={'display': 'flex'}),
+                    html.Div(style={'height': '10px'}),
+                    html.Div([
+                        html.B('Features', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Dropdown(
+                            id='ohlcv-features-dropdown',
+                            options=[
+                                # Oscillators
+                                {'label': 'RSI', 'value': 'rsi'},
+                                # Volatility Estimators
+                                {'label': 'ATR', 'value': 'atr'},
+                                {'label': 'Close-To-Close Volatility', 'value': 'c2c_vol'},
+                                {'label': 'Parkinson Volatility', 'value': 'parkinson_vol'},
+                                {'label': 'Garman Klass Volatility', 'value': 'garman_klass_vol'},
+                                {'label': 'Rodgers Satchell Volatility', 'value': 'rodgers_satchell_vol'},
+                                {'label': 'Yang Zhang Volatility', 'value': 'yang_zhang_vol'},
+                                # {'label': 'First Exit Time Volatility', 'value': 'fet_vol'},
+                                # Filters
+                                # {'label': 'CUSUM Filter', 'value': 'cusum'},
+                                # {'label': 'Z-Score Filter', 'value': 'zscore'},
+                                # Fractional Differentiation
+                                # {'label': 'Fractional Differentiation', 'value': 'frac_diff'},
+                            ],
+                            multi=True,
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        html.B('Window', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '10px'}),
+                        dcc.Input(
+                            id='ohlcv-features-window',
+                            type='number',
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        dbc.Button(
+                            'Add Features',
+                            id='add-ohlcv-features-button',
+                            color='primary',
+                            style={'width': '100%'}
+                        )
+                    ], style={'display': 'flex'})
+                ]
             ),
             dbc.AccordionItem(
                 title="Filters",
@@ -1691,6 +1778,11 @@ app.layout = html.Div([
     Output('type-casting-feature-dropdown', 'options'),
     Output('order-by-feature-dropdown', 'options'),
     Output('transformations-base-features', 'options'),
+    Output('open-feature-dropdown', 'options'),
+    Output('high-feature-dropdown', 'options'),
+    Output('low-feature-dropdown', 'options'),
+    Output('close-feature-dropdown', 'options'),
+    Output('volume-feature-dropdown', 'options'),
     Output('dist-plot-feature', 'options'),
     Output('line-plot-features', 'options'),
     Output('joint-plot-feature-x', 'options'),
@@ -1726,6 +1818,11 @@ def update_ui_components(_, data):
             features, # type-casting-feature-dropdown
             [{'label': 'Index', 'value': 'index'}] + features, # order-by-feature-dropdown
             features, # transformations-base-features
+            features, # open-feature-dropdown
+            features, # high-feature-dropdown
+            features, # low-feature-dropdown
+            features, # close-feature-dropdown
+            features, # volume-feature-dropdown
             features, # dist-plot-feature
             features, # line-plot-features
             features, # joint-plot-feature-x
