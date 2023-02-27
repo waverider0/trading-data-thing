@@ -3,6 +3,7 @@ import pandas as pd
 from scipy.stats import norm
 from sklearn.preprocessing import MinMaxScaler
 
+from dash import  ALL
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 
@@ -10,41 +11,53 @@ from contents.app import *
 
 
 @app.callback(
-    Output('line-plot-container', 'children'),
-    Input('line-plot-scale-data', 'on'),
-    Input('line-plot-features', 'value'),
-    State('the-data', 'data')
+    Output('assoc-matrix-sliders-container', 'children'),
+    Input('assoc-matrix-sliders', 'value'),
+    State('the-data', 'data'),
 )
-def render_line_plot(scale_data, features, data):
-    if features and data:
+def render_association_matrix_sliders(sliders, data):
+    if sliders and data:
         df = pd.DataFrame.from_dict(data)
-        if scale_data: df = normalize_df(df)
-        return [
-            dcc.Graph(
-                figure={
-                    'data': [go.Scatter(x=df.index, y=df[col], name=col) for col in features],
-                    'layout': go.Layout(
-                        title='Feature Line Plot',
-                        paper_bgcolor='rgba(0,0,0,0)',
-                        plot_bgcolor='rgba(0,0,0,0)',
-                        font=dict(color='#FFFFFF'),
-                        xaxis=dict(showgrid=False),
-                        yaxis=dict(showgrid=False),
-                    ),
-                }
-            ),
-        ]
+        children = []
+        for slider in sliders:
+            if slider == 'index':
+                min = df.index.min()
+                max = df.index.max()
+            else:
+                min = df[slider].min()
+                max = df[slider].max()
+            children.append(html.Div([
+                html.B(slider, style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                html.Div(style={'margin-top': '5px'}),
+                html.Div([
+                    dcc.RangeSlider(
+                        id={'type': 'assoc-matrix-slider', 'index': slider},
+                        min=min,
+                        max=max,
+                        value=[min, max],
+                        marks=None,
+                        tooltip={'always_visible': False, 'placement': 'bottom'},
+                    )
+                ], style={'width': '100%', 'margin-top': '10px'})
+            ], style={'display': 'flex'}))
+        return children
     raise PreventUpdate
 
 @app.callback(
     Output('assoc-matrix-container', 'children'),
     Input('assoc-matrix-scale-data', 'on'),
     Input('assoc-matrix-metric', 'value'),
+    Input('assoc-matrix-sliders', 'value'),
+    Input({'type': 'assoc-matrix-slider', 'index': ALL}, 'value'),
     State('the-data', 'data')
 )
-def render_association_matrix(scale_data, metric, data):
+def render_association_matrix(scale_data, metric, feature_filters, filter_ranges, data):
     if metric and data:
         df = pd.DataFrame.from_dict(data)
+        if feature_filters and filter_ranges:
+            for feature, range in zip(feature_filters, filter_ranges):
+                if feature == 'index': df = df[(df.index >= range[0]) & (df.index <= range[1])]
+                else: df = df[(df[feature] >= range[0]) & (df[feature] <= range[1])]
         if scale_data: df = normalize_df(df)
 
         matrix = pd.DataFrame()
@@ -78,14 +91,53 @@ def render_association_matrix(scale_data, metric, data):
     raise PreventUpdate
 
 @app.callback(
+    Output('joint-plot-sliders-container', 'children'),
+    Input('joint-plot-sliders', 'value'),
+    State('the-data', 'data'),
+)
+def render_joint_plot_sliders(sliders, data):
+    if sliders and data:
+        df = pd.DataFrame.from_dict(data)
+        children = []
+        for slider in sliders:
+            if slider == 'index':
+                min = df.index.min()
+                max = df.index.max()
+            else:
+                min = df[slider].min()
+                max = df[slider].max()
+            children.append(html.Div([
+                html.B(slider, style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                html.Div(style={'margin-top': '5px'}),
+                html.Div([
+                    dcc.RangeSlider(
+                        id={'type': 'joint-plot-slider', 'index': slider},
+                        min=min,
+                        max=max,
+                        value=[min, max],
+                        marks=None,
+                        tooltip={'always_visible': False, 'placement': 'bottom'},
+                    )
+                ], style={'width': '100%', 'margin-top': '10px'})
+            ], style={'display': 'flex'}))
+        return children
+    raise PreventUpdate
+
+@app.callback(
     Output('joint-plot-container', 'children'),
     Input('joint-plot-feature-x', 'value'),
     Input('joint-plot-feature-y', 'value'),
+    Input('joint-plot-sliders', 'value'),
+    Input({'type': 'joint-plot-slider', 'index': ALL}, 'value'),
     State('the-data', 'data')
 )
-def render_joint_plot(feature_x, feature_y, data):
+def render_joint_plot(feature_x, feature_y, feature_filters, filter_ranges, data):
     if feature_x and feature_y and data:
         df = pd.DataFrame.from_dict(data)
+        if feature_filters and filter_ranges:
+            for feature, range in zip(feature_filters, filter_ranges):
+                if feature == 'index': df = df[(df.index >= range[0]) & (df.index <= range[1])]
+                else: df = df[(df[feature] >= range[0]) & (df[feature] <= range[1])]
         return [
             dcc.Graph(
                 id='joint-plot',
@@ -128,17 +180,56 @@ def render_joint_plot(feature_x, feature_y, data):
     raise PreventUpdate
 
 @app.callback(
+    Output('heatmap-sliders-container', 'children'),
+    Input('heatmap-sliders', 'value'),
+    State('the-data', 'data')
+)
+def render_heatmap_sliders(sliders, data):
+    if sliders and data:
+        df = pd.DataFrame.from_dict(data)
+        children = []
+        for slider in sliders:
+            if slider == 'index':
+                min = df.index.min()
+                max = df.index.max()
+            else:
+                min = df[slider].min()
+                max = df[slider].max()
+            children.append(html.Div([
+                html.B(slider, style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                html.Div(style={'margin-top': '5px'}),
+                html.Div([
+                    dcc.RangeSlider(
+                        id={'type': 'heatmap-slider', 'index': slider},
+                        min=min,
+                        max=max,
+                        value=[min, max],
+                        marks=None,
+                        tooltip={'always_visible': False, 'placement': 'bottom'},
+                    )
+                ], style={'width': '100%', 'margin-top': '10px'})
+            ], style={'display': 'flex'}))
+        return children
+    raise PreventUpdate
+
+@app.callback(
     Output('heatmap-container', 'children'),
     Input('heatmap-feature-x', 'value'),
     Input('heatmap-feature-y', 'value'),
     Input('heatmap-magnitude', 'value'),
+    Input('heatmap-sliders', 'value'),
+    Input({'type': 'heatmap-slider', 'index': ALL}, 'value'),
     Input('heatmap-colorscale', 'value'),
     Input('heatmap-reverse-colorscale', 'on'),
     State('the-data', 'data')
 )
-def render_heatmap(feature_x, feature_y, magnitude, colorscale, reverse, data):
+def render_heatmap(feature_x, feature_y, magnitude, feature_filters, filter_ranges, colorscale, reverse, data):
     if feature_x and feature_y and magnitude and colorscale and data:
         df = pd.DataFrame.from_dict(data)
+        if feature_filters and filter_ranges:
+            for feature, range in zip(feature_filters, filter_ranges):
+                if feature == 'index': df = df[(df.index >= range[0]) & (df.index <= range[1])]
+                else: df = df[(df[feature] >= range[0]) & (df[feature] <= range[1])]
         if magnitude == 'density':
             return [
                 dcc.Graph(

@@ -1,12 +1,40 @@
 import numpy as np
 import pandas as pd
 from scipy.stats import ks_2samp, cramervonmises_2samp
+from sklearn.preprocessing import MinMaxScaler
 
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 
 from contents.app import *
 
+
+@app.callback(
+    Output('line-plot-container', 'children'),
+    Input('line-plot-scale-data', 'on'),
+    Input('line-plot-features', 'value'),
+    State('the-data', 'data')
+)
+def render_line_plot(scale_data, features, data):
+    if features and data:
+        df = pd.DataFrame.from_dict(data)
+        if scale_data: df = normalize_df(df)
+        return [
+            dcc.Graph(
+                figure={
+                    'data': [go.Scatter(x=df.index, y=df[col], name=col) for col in features],
+                    'layout': go.Layout(
+                        title='Feature Line Plot',
+                        paper_bgcolor='rgba(0,0,0,0)',
+                        plot_bgcolor='rgba(0,0,0,0)',
+                        font=dict(color='#FFFFFF'),
+                        xaxis=dict(showgrid=False),
+                        yaxis=dict(showgrid=False),
+                    ),
+                }
+            ),
+        ]
+    raise PreventUpdate
 
 @app.callback(
     Output('drift-plot-container', 'children'),
@@ -86,3 +114,10 @@ def render_drift_plot(test, feature, n_splits, data):
     raise PreventUpdate
 
 
+# Helper Methods
+def normalize_df(df):
+    """ Normalize a dataframe with MinMaxScaler (Keep the column names) """
+    cols = df.columns
+    df = pd.DataFrame(MinMaxScaler().fit_transform(df))
+    df.columns = cols
+    return df

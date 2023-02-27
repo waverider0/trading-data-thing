@@ -474,8 +474,19 @@ distributions = [
                             value='scatter',
                             style={'width': '100%'}
                         ),
+                        html.Div(style={'width': '10px'}),
+                        html.B('Sliders', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='var-plot-sliders',
+                            options=[],
+                            multi=True,
+                            style={'width': '100%'}
+                        )
                     ], style={'display': 'flex'}),
-                    html.Div(style={'height': '10px'}),
+                    html.Div(style={'height': '20px'}),
+                    html.Div(id='var-plot-sliders-container'),
+                    html.Div(style={'height': '20px'}),
                     html.Div(id='var-plot-container'),
                 ],
             ),
@@ -514,8 +525,19 @@ distributions = [
                             multi=True,
                             style={'width': '100%'}
                         ),
+                        html.Div(style={'width': '10px'}),
+                        html.B('Sliders', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='dist-plot-sliders',
+                            options=[],
+                            multi=True,
+                            style={'width': '100%'}
+                        )
                     ], style={'display': 'flex'}),
-                    html.Div(style={'height': '10px'}),
+                    html.Div(style={'height': '20px'}),
+                    html.Div(id='dist-plot-sliders-container'),
+                    html.Div(style={'height': '20px'}),
                     html.Div(id='dist-plot-container'),
                 ],
             ),
@@ -576,8 +598,19 @@ statistical_association = [
                             ],
                             style={'width': '100%'}
                         ),
+                        html.Div(style={'width': '10px'}),
+                        html.B('Sliders', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='assoc-matrix-sliders',
+                            options=[],
+                            multi=True,
+                            style={'width': '100%'}
+                        )
                     ], style={'display': 'flex'}),
-                    html.Div(style={'height': '10px'}),
+                    html.Div(style={'height': '20px'}),
+                    html.Div(id='assoc-matrix-sliders-container'),
+                    html.Div(style={'height': '20px'}),
                     html.Div(id='assoc-matrix-container'),
                 ]
             ),
@@ -600,8 +633,19 @@ statistical_association = [
                             options=[],
                             style={'width': '100%'}
                         ),
+                        html.Div(style={'width': '20px'}),
+                        html.B('Sliders', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='joint-plot-sliders',
+                            options=[],
+                            multi=True,
+                            style={'width': '100%'}
+                        )
                     ], style={'display': 'flex'}),
-                    html.Div(style={'height': '10px'}),
+                    html.Div(style={'height': '20px'}),
+                    html.Div(id='joint-plot-sliders-container'),
+                    html.Div(style={'height': '20px'}),
                     html.Div(id='joint-plot-container'),
                 ]
             ),
@@ -632,7 +676,18 @@ statistical_association = [
                             options=[],
                             style={'width': '100%'}
                         ),
-                        html.Div(style={'width': '20px'}),
+                    ], style={'display': 'flex'}),
+                    html.Div(style={'height': '10px'}),
+                    html.Div([
+                        html.B('Sliders', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='heatmap-sliders',
+                            options=[],
+                            multi=True,
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '10px'}),
                         html.B('Colorscale', style={'margin-top': '5px', 'white-space': 'nowrap'}),
                         html.Div(style={'width': '5px'}),
                         dcc.Dropdown(
@@ -657,10 +712,15 @@ statistical_association = [
                             style={'margin-top': '5px'}
                         ),
                     ], style={'display': 'flex'}),
-                    html.Div(style={'height': '10px'}),
+                    html.Div(style={'height': '20px'}),
+                    html.Div(id='heatmap-sliders-container'),
+                    html.Div(style={'height': '20px'}),
                     html.Div(id='heatmap-container'),
                 ]
-            
+            ),
+            dbc.AccordionItem(
+                title="3D Plots",
+                children=[],
             ),
         ], start_collapsed=True, always_open=False),
     ],
@@ -1783,13 +1843,18 @@ app.layout = html.Div([
     Output('low-feature-dropdown', 'options'),
     Output('close-feature-dropdown', 'options'),
     Output('volume-feature-dropdown', 'options'),
+    Output('var-plot-sliders', 'options'),
     Output('dist-plot-feature', 'options'),
+    Output('dist-plot-sliders', 'options'),
     Output('line-plot-features', 'options'),
+    Output('assoc-matrix-sliders', 'options'),
     Output('joint-plot-feature-x', 'options'),
     Output('joint-plot-feature-y', 'options'),
+    Output('joint-plot-sliders', 'options'),
     Output('heatmap-feature-x', 'options'),
     Output('heatmap-feature-y', 'options'),
     Output('heatmap-magnitude', 'options'),
+    Output('heatmap-sliders', 'options'),
     Output('drift-plot-feature', 'options'),
     Output('drift-plot-n-splits', 'max'),
     Output('boruta-shap-target', 'options'),
@@ -1823,13 +1888,18 @@ def update_ui_components(_, data):
             features, # low-feature-dropdown
             features, # close-feature-dropdown
             features, # volume-feature-dropdown
+            [{'label': 'Index', 'value': 'index'}] + features, # var-plot-sliders
             features, # dist-plot-feature
+            [{'label': 'Index', 'value': 'index'}] + features, # dist-plot-sliders
             features, # line-plot-features
+            [{'label': 'Index', 'value': 'index'}] + features, # assoc-matrix-sliders
             features, # joint-plot-feature-x
             features, # joint-plot-feature-y
+            [{'label': 'Index', 'value': 'index'}] + features, # joint-plot-sliders
             features, # heatmap-feature-x
             features, # heatmap-feature-y
             [{'label': 'Density', 'value': 'density'}] + features, # heatmap-magnitude
+            [{'label': 'Index', 'value': 'index'}] + features, # heatmap-sliders
             features, # drift-plot-feature
             math.floor(len(df.index) / 2), # drift-plot-n-splits
             features, # boruta-shap-target
