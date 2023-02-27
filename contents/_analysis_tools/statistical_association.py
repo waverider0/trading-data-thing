@@ -41,7 +41,7 @@ def render_association_matrix_sliders(sliders, data):
                 ], style={'width': '100%', 'margin-top': '10px'})
             ], style={'display': 'flex'}))
         return children
-    raise PreventUpdate
+    return []
 
 @app.callback(
     Output('assoc-matrix-container', 'children'),
@@ -121,7 +121,7 @@ def render_joint_plot_sliders(sliders, data):
                 ], style={'width': '100%', 'margin-top': '10px'})
             ], style={'display': 'flex'}))
         return children
-    raise PreventUpdate
+    return []
 
 @app.callback(
     Output('joint-plot-container', 'children'),
@@ -210,7 +210,7 @@ def render_heatmap_sliders(sliders, data):
                 ], style={'width': '100%', 'margin-top': '10px'})
             ], style={'display': 'flex'}))
         return children
-    raise PreventUpdate
+    return []
 
 @app.callback(
     Output('heatmap-container', 'children'),

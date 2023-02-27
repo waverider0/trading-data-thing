@@ -41,7 +41,7 @@ def render_var_plot_sliders(sliders, data):
                 ], style={'width': '100%', 'margin-top': '10px'})
             ], style={'display': 'flex'}))
         return children
-    raise PreventUpdate
+    return []
 
 @app.callback(
     Output('var-plot-container', 'children'),
@@ -126,7 +126,7 @@ def render_dist_plot_sliders(sliders, data):
                 ], style={'width': '100%', 'margin-top': '10px'})
             ], style={'display': 'flex'}))
         return children
-    raise PreventUpdate
+    return []
 
 @app.callback(
     Output('dist-plot-container', 'children'),
