@@ -88,7 +88,7 @@ def render_association_matrix(scale_data, metric, feature_filters, filter_ranges
             ),
         ]
 
-    raise PreventUpdate
+    return []
 
 @app.callback(
     Output('joint-plot-sliders-container', 'children'),
@@ -177,7 +177,7 @@ def render_joint_plot(feature_x, feature_y, feature_filters, filter_ranges, data
                 )
             ),
         ]
-    raise PreventUpdate
+    return []
 
 @app.callback(
     Output('heatmap-sliders-container', 'children'),
@@ -299,7 +299,7 @@ def render_heatmap(feature_x, feature_y, magnitude, feature_filters, filter_rang
                     }
                 )
             ]
-    raise PreventUpdate
+    return []
 
 
 # Helper Methods

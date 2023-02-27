@@ -93,7 +93,7 @@ def render_var_plot(plot_type, scale_data, feature_filters, filter_ranges, data)
                 ),
             ]
         
-    raise PreventUpdate
+    return []
 
 @app.callback(
     Output('dist-plot-sliders-container', 'children'),
@@ -192,7 +192,7 @@ def render_dist_plot(scale_data, feature, distributions, feature_filters, filter
         
         return graph
 
-    raise PreventUpdate
+    return []
 
 
 # Helper Methods

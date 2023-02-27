@@ -34,7 +34,7 @@ def render_line_plot(scale_data, features, data):
                 }
             ),
         ]
-    raise PreventUpdate
+    return []
 
 @app.callback(
     Output('drift-plot-container', 'children'),
@@ -111,7 +111,7 @@ def render_drift_plot(test, feature, n_splits, data):
                 ),
             ]
 
-    raise PreventUpdate
+    return []
 
 
 # Helper Methods
