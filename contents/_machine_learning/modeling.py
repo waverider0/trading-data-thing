@@ -10,7 +10,7 @@ import pandas as pd
 import numpy as np
 from scipy.stats import norm
 
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import LabelEncoder, MinMaxScaler, Normalizer, StandardScaler
 from sklearn.linear_model import LogisticRegression, LinearRegression
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from xgboost import XGBClassifier, XGBRegressor
@@ -1109,10 +1109,12 @@ def update_reg_plots(plot_type, modeling_results):
 
         elif plot_type == 'residuals':
             # Empirical
+            #errors = 100 * pd.Series(modeling_results['residuals']) / pd.Series(modeling_results['true_vals'])
+            errors = modeling_results['residuals']
             graph = dcc.Graph(
                 figure=go.Figure(
                     data=go.Scatter(
-                        x=modeling_results['residuals'],
+                        x=errors,
                         y=modeling_results['preds'],
                         mode='markers',
                         name='Empirical',
@@ -1133,10 +1135,7 @@ def update_reg_plots(plot_type, modeling_results):
                             titlefont=dict(color='#FFFFFF'),
                             showgrid=False,
                         ),
-                        xaxis_range=[
-                            min([x * -1 if x > 0 else x for x in modeling_results['preds']]),
-                            max([x * -1 if x < 0 else x for x in modeling_results['preds']])
-                        ]
+                        xaxis_range=[min(modeling_results['preds']), max(modeling_results['preds'])]
                     )
                 )
             )
@@ -1157,10 +1156,11 @@ def update_reg_plots(plot_type, modeling_results):
             return graph
 
         elif plot_type == 'residual_dist':
-            residuals = modeling_results['residuals']
+            #pct_errors = 100 * pd.Series(modeling_results['residuals']) / pd.Series(modeling_results['true_vals'])
+            errors = modeling_results['residuals']
             # Perfect Normal
-            mu, std = norm.fit(residuals)
-            x = np.linspace(min(residuals), max(residuals), 100)
+            mu, std = norm.fit(errors)
+            x = np.linspace(min(errors), max(errors), 100)
             p = norm.pdf(x, mu, std)
             graph = dcc.Graph(
                 figure=go.Figure(
@@ -1192,7 +1192,7 @@ def update_reg_plots(plot_type, modeling_results):
             # Empirical
             graph.figure.add_trace(
                 go.Histogram(
-                    x=residuals,
+                    x=errors,
                     name='Empirical',
                     histnorm='probability density',
                     marker=dict(color='#37699b'),
@@ -1274,4 +1274,3 @@ def save_temp_model(model, features, model_name):
 
     with open(f'{dirname}/storage/temp/{model_name}/features.txt', 'w') as f:
         f.write(','.join(features))
-

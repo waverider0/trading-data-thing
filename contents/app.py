@@ -272,98 +272,23 @@ add_features = [
                 ]
             ),
             dbc.AccordionItem(
-                title="OHLCV Features",
+                title="Metalabels",
                 children=[
                     html.Div([
-                        html.B('Open', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.B('Model Type', style={'margin-top': '5px', 'white-space': 'nowrap'}),
                         html.Div(style={'width': '10px'}),
                         dcc.Dropdown(
-                            id='open-feature-dropdown',
-                            options=[],
-                            style={'width': '100%'}
-                        ),
-                        html.Div(style={'width': '30px'}),
-                        html.B('High', style={'margin-top': '5px', 'white-space': 'nowrap'}),
-                        html.Div(style={'width': '10px'}),
-                        dcc.Dropdown(
-                            id='high-feature-dropdown',
-                            options=[],
-                            style={'width': '100%'}
-                        ),
-                        html.Div(style={'width': '30px'}),
-                        html.B('Low', style={'margin-top': '5px', 'white-space': 'nowrap'}),
-                        html.Div(style={'width': '10px'}),
-                        dcc.Dropdown(
-                            id='low-feature-dropdown',
-                            options=[],
-                            style={'width': '100%'}
-                        ),
-                        html.Div(style={'width': '30px'}),
-                        html.B('Close', style={'margin-top': '5px', 'white-space': 'nowrap'}),
-                        html.Div(style={'width': '10px'}),
-                        dcc.Dropdown(
-                            id='close-feature-dropdown',
-                            options=[],
-                            style={'width': '100%'}
-                        ),
-                        html.Div(style={'width': '30px'}),
-                        html.B('Volume', style={'margin-top': '5px', 'white-space': 'nowrap'}),
-                        html.Div(style={'width': '10px'}),
-                        dcc.Dropdown(
-                            id='volume-feature-dropdown',
-                            options=[],
+                            id='metalabels-model-type',
+                            options=[
+                                {'label': 'Classification', 'value': 'clf'},
+                                {'label': 'Regression', 'value': 'reg'},
+                            ],
                             style={'width': '100%'}
                         ),
                     ], style={'display': 'flex'}),
-                    html.Div(style={'height': '10px'}),
-                    html.Div([
-                        html.B('Features', style={'margin-top': '5px', 'white-space': 'nowrap'}),
-                        html.Div(style={'width': '10px'}),
-                        dcc.Dropdown(
-                            id='ohlcv-features-dropdown',
-                            options=[
-                                # Oscillators
-                                {'label': 'RSI', 'value': 'rsi'},
-                                # Volatility Estimators
-                                {'label': 'ATR', 'value': 'atr'},
-                                {'label': 'Close-To-Close Volatility', 'value': 'c2c_vol'},
-                                {'label': 'Parkinson Volatility', 'value': 'parkinson_vol'},
-                                {'label': 'Garman Klass Volatility', 'value': 'garman_klass_vol'},
-                                {'label': 'Rodgers Satchell Volatility', 'value': 'rodgers_satchell_vol'},
-                                {'label': 'Yang Zhang Volatility', 'value': 'yang_zhang_vol'},
-                                # {'label': 'First Exit Time Volatility', 'value': 'fet_vol'},
-                                # Filters
-                                # {'label': 'CUSUM Filter', 'value': 'cusum'},
-                                # {'label': 'Z-Score Filter', 'value': 'zscore'},
-                                # Fractional Differentiation
-                                # {'label': 'Fractional Differentiation', 'value': 'frac_diff'},
-                            ],
-                            multi=True,
-                            style={'width': '100%'}
-                        ),
-                        html.Div(style={'width': '20px'}),
-                        html.B('Window', style={'margin-top': '5px', 'white-space': 'nowrap'}),
-                        html.Div(style={'width': '10px'}),
-                        dcc.Input(
-                            id='ohlcv-features-window',
-                            type='number',
-                            style={'width': '100%'}
-                        ),
-                        html.Div(style={'width': '20px'}),
-                        dbc.Button(
-                            'Add Features',
-                            id='add-ohlcv-features-button',
-                            color='primary',
-                            style={'width': '100%'}
-                        )
-                    ], style={'display': 'flex'})
+                    html.Div(style={'height': '20px'}),
+                    html.Div(id='metalabels-model-inputs'),
                 ]
-            ),
-            dbc.AccordionItem(
-                title="Filters",
-            ),
-            dbc.AccordionItem(
-                title="Metalabeling",
             ),
         ], start_collapsed=True, always_open=False),
     ], 
@@ -1838,11 +1763,6 @@ app.layout = html.Div([
     Output('type-casting-feature-dropdown', 'options'),
     Output('order-by-feature-dropdown', 'options'),
     Output('transformations-base-features', 'options'),
-    Output('open-feature-dropdown', 'options'),
-    Output('high-feature-dropdown', 'options'),
-    Output('low-feature-dropdown', 'options'),
-    Output('close-feature-dropdown', 'options'),
-    Output('volume-feature-dropdown', 'options'),
     Output('var-plot-sliders', 'options'),
     Output('dist-plot-feature', 'options'),
     Output('dist-plot-sliders', 'options'),
@@ -1881,25 +1801,20 @@ def update_ui_components(_, data):
             features, # drop-features-dropdown
             features, # rename-features-dropdown
             features, # type-casting-feature-dropdown
-            [{'label': 'Index', 'value': 'index'}] + features, # order-by-feature-dropdown
+            features, # order-by-feature-dropdown
             features, # transformations-base-features
-            features, # open-feature-dropdown
-            features, # high-feature-dropdown
-            features, # low-feature-dropdown
-            features, # close-feature-dropdown
-            features, # volume-feature-dropdown
-            [{'label': 'Index', 'value': 'index'}] + features, # var-plot-sliders
+            features, # var-plot-sliders
             features, # dist-plot-feature
-            [{'label': 'Index', 'value': 'index'}] + features, # dist-plot-sliders
+            features, # dist-plot-sliders
             features, # line-plot-features
-            [{'label': 'Index', 'value': 'index'}] + features, # assoc-matrix-sliders
+            features, # assoc-matrix-sliders
             features, # joint-plot-feature-x
             features, # joint-plot-feature-y
-            [{'label': 'Index', 'value': 'index'}] + features, # joint-plot-sliders
+            features, # joint-plot-sliders
             features, # heatmap-feature-x
             features, # heatmap-feature-y
             [{'label': 'Density', 'value': 'density'}] + features, # heatmap-magnitude
-            [{'label': 'Index', 'value': 'index'}] + features, # heatmap-sliders
+            features, # heatmap-sliders
             features, # drift-plot-feature
             math.floor(len(df.index) / 2), # drift-plot-n-splits
             features, # boruta-shap-target

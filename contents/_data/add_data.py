@@ -26,6 +26,7 @@ def upload_data(contents, filename, date):
             # Assume that the user uploaded an excel file
             df = pd.read_excel(io.BytesIO(decoded))
 
+        df.insert(0, 'index', range(0, len(df)))
         return df.to_dict('records'), ''
     raise PreventUpdate
 
