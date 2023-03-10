@@ -372,125 +372,6 @@ preprocessing = [
     ),
 ]
 
-distributions = [
-    html.H2('Distributions'),
-    dmc.Container([
-        dbc.Accordion([
-            dbc.AccordionItem(
-                title="Variance Plots",
-                children=[
-                    html.Div([
-                        html.B('Scale Data', style={'margin-top': '5px', 'white-space': 'nowrap'}),
-                        html.Div(style={'width': '5px'}),
-                        daq.BooleanSwitch(
-                            id='var-plot-scale-data',
-                            on=False,
-                            style={'margin-top': '5px'}
-                        ),
-                        html.Div(style={'width': '10px'}),
-                        html.B('Select Plot Type', style={'margin-top': '5px', 'white-space': 'nowrap'}),
-                        html.Div(style={'width': '5px'}),
-                        dcc.Dropdown(
-                            id='var-plot-type',
-                            options=[
-                                {'label': 'Box', 'value': 'box'},
-                                {'label': 'Violin', 'value': 'violin'},
-                            ],
-                            value='scatter',
-                            style={'width': '100%'}
-                        ),
-                        html.Div(style={'width': '10px'}),
-                        html.B('Sliders', style={'margin-top': '5px', 'white-space': 'nowrap'}),
-                        html.Div(style={'width': '5px'}),
-                        dcc.Dropdown(
-                            id='var-plot-sliders',
-                            options=[],
-                            multi=True,
-                            style={'width': '100%'}
-                        )
-                    ], style={'display': 'flex'}),
-                    html.Div(style={'height': '20px'}),
-                    html.Div(id='var-plot-sliders-container'),
-                    html.Div(style={'height': '20px'}),
-                    html.Div(id='var-plot-container'),
-                ],
-            ),
-            dbc.AccordionItem(
-                title="Distribution Plots",
-                children=[
-                    html.Div([
-                        html.B('Scale Data', style={'margin-top': '5px', 'white-space': 'nowrap'}),
-                        html.Div(style={'width': '5px'}),
-                        daq.BooleanSwitch(
-                            id='dist-plot-scale-data',
-                            on=False,
-                            style={'margin-top': '5px'}
-                        ),
-                        html.Div(style={'width': '10px'}),
-                        html.B('Select Feature', style={'margin-top': '5px', 'white-space': 'nowrap'}),
-                        html.Div(style={'width': '5px'}),
-                        dcc.Dropdown(
-                            id='dist-plot-feature',
-                            options=[],
-                            style={'width': '100%'}
-                        ),
-                        html.Div(style={'width': '10px'}),
-                        html.B('Select Distributions', style={'margin-top': '5px', 'white-space': 'nowrap'}),
-                        html.Div(style={'width': '5px'}),
-                        dcc.Dropdown(
-                            id='dist-plot-distributions',
-                            options=[
-                                {'label': 'Normal', 'value': 'normal'},
-                                {'label': 'Log Normal', 'value': 'lognormal'},
-                                {'label': 'Exponential', 'value': 'exponential'},
-                                {'label': 'Poisson', 'value': 'poisson'},
-                                {'label': 'Gamma', 'value': 'gamma'},
-                                {'label': 'Gumbel', 'value': 'gumbel'},
-                            ],
-                            multi=True,
-                            style={'width': '100%'}
-                        ),
-                        html.Div(style={'width': '10px'}),
-                        html.B('Sliders', style={'margin-top': '5px', 'white-space': 'nowrap'}),
-                        html.Div(style={'width': '5px'}),
-                        dcc.Dropdown(
-                            id='dist-plot-sliders',
-                            options=[],
-                            multi=True,
-                            style={'width': '100%'}
-                        )
-                    ], style={'display': 'flex'}),
-                    html.Div(style={'height': '20px'}),
-                    html.Div(id='dist-plot-sliders-container'),
-                    html.Div(style={'height': '20px'}),
-                    html.Div(id='dist-plot-container'),
-                ],
-            ),
-            dbc.AccordionItem(
-                title="QQ Plots",
-            ),
-            dbc.AccordionItem(
-                title="Normality Tests",
-            ),
-        ], start_collapsed=True, always_open=False),
-    ],
-    id='distributions-container',
-    fluid=True,
-    style={
-        'border-style': 'solid',
-        'border-color': 'grey',
-        'border-width': '1px',
-        'padding': '12px',
-    }
-    ),
-    dbc.Popover(
-        [],
-        target='distributions-container',
-        trigger='hover',
-        hide_arrow=True,
-        id='distributions-container-popover',
-    ),
-]
 statistical_association = [
     html.H2('Statistical Association'),
     dmc.Container([
@@ -776,22 +657,6 @@ tendencies = [
                             style={'width': '100%'}
                         ),
                         html.Div(style={'width': '20px'}),
-                        html.B('Descriptive Statistic', style={'margin-top': '5px', 'white-space': 'nowrap'}),
-                        html.Div(style={'width': '5px'}),
-                        dcc.Dropdown(
-                            id='descriptive-stat',
-                            options=[
-                                {'label': 'Mean', 'value': 'mean'},
-                                {'label': 'Median', 'value': 'median'},
-                                {'label': 'Standard Deviation', 'value': 'std'},
-                                {'label': 'Minimum', 'value': 'min'},
-                                {'label': 'Maximum', 'value': 'max'},
-                                {'label': 'Skew', 'value': 'skew'},
-                                {'label': 'Kurtosis', 'value': 'kurt'},
-                            ],
-                            style={'width': '100%'}
-                        ),
-                        html.Div(style={'width': '20px'}),
                         html.B('Continous Filters', style={'margin-top': '5px', 'white-space': 'nowrap'}),
                         html.Div(style={'width': '5px'}),
                         dcc.Dropdown(
@@ -824,14 +689,6 @@ tendencies = [
                         html.Div(style={'width': '5px'}),
                         dcc.Dropdown(
                             id='hit-rate-feature',
-                            options=[],
-                            style={'width': '100%'}
-                        ),
-                        html.Div(style={'width': '20px'}),
-                        html.B('Class', style={'margin-top': '5px', 'white-space': 'nowrap'}),
-                        html.Div(style={'width': '5px'}),
-                        dcc.Dropdown(
-                            id='hit-rate-class',
                             options=[],
                             style={'width': '100%'}
                         ),
@@ -989,57 +846,6 @@ feature_importance = [
         trigger='hover',
         hide_arrow=True,
         id='feature-importance-container-popover',
-    ),
-]
-dimensionality_reduction = [
-    html.H2('Dimensionality Reduction'),
-    dmc.Container([
-        dbc.Accordion([
-            dbc.AccordionItem(
-                title='Matrix Decomposition',
-                children=[
-                    html.Div([
-                        html.B('Method', style={'margin-top': '5px', 'white-space': 'nowrap'}),
-                        html.Div(style={'width': '10px'}),
-                        dcc.Dropdown(
-                            id='matrix-decomp-method',
-                            options=[
-                                {'label': 'PCA', 'value': 'pca'},
-                                {'label': 'Kernel PCA', 'value': 'kpca'},
-                                {'label': 'Truncated SVD', 'value': 'svd'},
-                            ],
-                            style={'width': '100%'}
-                        ),
-                    ], style={'display': 'flex'}),
-                    html.Div(style={'height': '10px'}),
-                    html.Div(id='matrix-decomp-inputs-container'),
-                    html.Div(style={'height': '10px'}),
-                    html.Div(id='matrix-decomp-plot-container'),
-                ]
-            ),
-            dbc.AccordionItem(
-                title='Manifold Learning',
-            ),
-            dbc.AccordionItem(
-                title='Discriminant Analysis',
-            ),
-        ], start_collapsed=True, always_open=False),
-    ],
-    id='dimensionality-reduction-container',
-    fluid=True,
-    style={
-        'border-style': 'solid',
-        'border-color': 'grey',
-        'border-width': '1px',
-        'padding': '12px',
-    }
-    ),
-    dbc.Popover(
-        [],
-        target='dimensionality-reduction-container',
-        trigger='hover',
-        hide_arrow=True,
-        id='dimensionality-reduction-container-popover',
     ),
 ]
 hyperparameter_tuning = [
@@ -1533,28 +1339,6 @@ app.layout = html.Div([
                         }
                     ),
                 ], style={'display': 'flex', 'flex-direction': 'row', 'align-items': 'center', 'margin-top': '10px'}),
-                # distributions
-                dbc.Button(
-                    html.A([
-                        DashIconify(
-                            icon="mdi:chart-bell-curve",
-                            width=30,
-                            height=30,
-                        ),
-                        html.Span(style={"margin-left": "10px"}),
-                        "Distributions",
-                    ], href='#distributions', style={'color': 'white', 'text-decoration': 'none'}),
-                    outline=True,
-                    style={'textAlign': 'left', 'width': '100%'},
-                    id='navbutton-distributions'
-                ),
-                dbc.Popover(
-                    [],
-                    target='navbutton-distributions',
-                    trigger='hover',
-                    hide_arrow=True,
-                    id='distributions-navbutton-popover',
-                ),
                 # statistical association
                 dbc.Button(
                     html.A([
@@ -1667,28 +1451,6 @@ app.layout = html.Div([
                     trigger='hover',
                     hide_arrow=True,
                     id='feature-importance-navbutton-popover',
-                ),
-                # dimensionality reduction
-                dbc.Button(
-                    html.A([
-                        DashIconify(
-                            icon="fluent-mdl2:web-components",
-                            width=30,
-                            height=30,
-                        ),
-                        html.Span(style={"margin-left": "10px"}),
-                        "Dimensionality Reduction",
-                    ], href='#dimensionality-reduction', style={'color': 'white', 'text-decoration': 'none'}),
-                    outline=True,
-                    style={'textAlign': 'left', 'width': '100%'},
-                    id='navbutton-dimensionality-reduction'
-                ),
-                dbc.Popover(
-                    [],
-                    target='navbutton-dimensionality-reduction',
-                    trigger='hover',
-                    hide_arrow=True,
-                    id='dimensionality-reduction-navbutton-popover',
                 ),
                 # hyperparameter tuning
                 dbc.Button(
@@ -1820,13 +1582,6 @@ app.layout = html.Div([
             ),
             # Analysis Tools
             dmc.TimelineItem(
-                id='distributions',
-                lineVariant='solid',
-                children=distributions,
-                bullet=DashIconify(icon="mdi:chart-bell-curve", width=25, height=25),
-                style={'color': '#FFFFFF'},
-            ),
-            dmc.TimelineItem(
                 id='statistical-association',
                 lineVariant='solid',
                 children=statistical_association,
@@ -1853,13 +1608,6 @@ app.layout = html.Div([
                 lineVariant='solid',
                 children=feature_importance,
                 bullet=DashIconify(icon="healthicons:medium-bars", width=25, height=25),
-                style={'color': '#FFFFFF'},
-            ),
-            dmc.TimelineItem(
-                id='dimensionality-reduction',
-                lineVariant='solid',
-                children=dimensionality_reduction,
-                bullet=DashIconify(icon="fluent-mdl2:web-components", width=25, height=25),
                 style={'color': '#FFFFFF'},
             ),
             dmc.TimelineItem(
@@ -1911,9 +1659,6 @@ app.layout = html.Div([
     Output('type-casting-feature-dropdown', 'options'),
     Output('order-by-feature-dropdown', 'options'),
     Output('transformations-base-features', 'options'),
-    Output('var-plot-sliders', 'options'),
-    Output('dist-plot-feature', 'options'),
-    Output('dist-plot-sliders', 'options'),
     Output('line-plot-features', 'options'),
     Output('assoc-matrix-sliders', 'options'),
     Output('joint-plot-feature-x', 'options'),
@@ -1957,9 +1702,6 @@ def update_ui_components(_, data):
             features, # type-casting-feature-dropdown
             features, # order-by-feature-dropdown
             features, # transformations-base-features
-            features, # var-plot-sliders
-            features, # dist-plot-feature
-            features, # dist-plot-sliders
             features, # line-plot-features
             features, # assoc-matrix-sliders
             features, # joint-plot-feature-x
@@ -2058,17 +1800,6 @@ def hover_price_charts(is_open1, is_open2):
     return True, 'solid'
 
 @app.callback(
-    Output('navbutton-distributions', 'outline'),
-    Output('distributions', 'lineVariant'),
-    Input('distributions-navbutton-popover', 'is_open'),
-    Input('distributions-container-popover', 'is_open')
-)
-def hover_distributions(is_open1, is_open2):
-    if is_open1 or is_open2:
-        return False, 'dashed'
-    return True, 'solid'
-
-@app.callback(
     Output('navbutton-statistical-association', 'outline'),
     Output('statistical-association', 'lineVariant'),
     Input('statistical-association-navbutton-popover', 'is_open'),
@@ -2108,17 +1839,6 @@ def hover_tendencies(is_open1, is_open2):
     Input('feature-importance-container-popover', 'is_open')
 )
 def hover_feature_importance(is_open1, is_open2):
-    if is_open1 or is_open2:
-        return False, 'dashed'
-    return True, 'solid'
-
-@app.callback(
-    Output('navbutton-dimensionality-reduction', 'outline'),
-    Output('dimensionality-reduction', 'lineVariant'),
-    Input('dimensionality-reduction-navbutton-popover', 'is_open'),
-    Input('dimensionality-reduction-container-popover', 'is_open')
-)
-def hover_dimensionality_reduction(is_open1, is_open2):
     if is_open1 or is_open2:
         return False, 'dashed'
     return True, 'solid'

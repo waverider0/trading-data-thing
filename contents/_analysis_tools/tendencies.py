@@ -43,7 +43,6 @@ def render_filters(continuous_filters, catagorical_filters, data):
                 
         if catagorical_filters:
             for filter in catagorical_filters:
-                # checkboxes for each category
                 children.append(html.Div([
                     html.Div([
                         html.B(filter, style={'margin-top': '5px', 'white-space': 'nowrap'}),
@@ -66,7 +65,6 @@ def render_filters(continuous_filters, catagorical_filters, data):
 @app.callback(
     Output('descriptive-stats-output', 'children'),
     Input('descriptive-stats-feature', 'value'),
-    Input('descriptive-stat', 'value'),
     Input('descriptive-stats-continuous-filters', 'value'),
     Input('descriptive-stats-categorical-filters', 'value'),
     Input({'type': 'descriptive-stats-continuous-filter', 'index': ALL}, 'value'),
@@ -75,14 +73,13 @@ def render_filters(continuous_filters, catagorical_filters, data):
 )
 def calculate_descriptive_stat(
     feature,
-    stat,
     continous_filters,
     categorical_filters,
     filter_ranges,
     filter_categories,
     data
 ):
-    if feature and stat and data:
+    if feature and data:
         df = pd.DataFrame.from_dict(data)
         if continous_filters and filter_ranges:
             for feature_, range in zip(continous_filters, filter_ranges):
@@ -90,67 +87,99 @@ def calculate_descriptive_stat(
         if categorical_filters and filter_categories:
             if any(filter_categories):
                 for feature_, categories in zip(categorical_filters, filter_categories):
-                    df = df[df[feature_].isin(categories)]
+                    if categories: df = df[df[feature_].isin(categories)]
 
-        if stat == 'mean':
-            return html.Div([
+        point_estimates = html.Div([
+            html.Hr(),
+            html.Div(style={'height': '17px'}),
+            html.Div([
                 html.B('Mean:'),
                 html.Div(style={'width': '5px'}),
                 html.Div(round(df[feature].mean(), 3))
-            ], style={'display': 'flex'})
-        elif stat == 'median':
-            return html.Div([
+            ], style={'display': 'flex'}),
+            html.Div(style={'height': '5px'}),
+            html.Div([
                 html.B('Median:'),
                 html.Div(style={'width': '5px'}),
                 html.Div(round(df[feature].median(), 3))
-            ], style={'display': 'flex'})
-        elif stat == 'std':
-            return html.Div([
-                html.B('Standard Deviation:'),
-                html.Div(style={'width': '5px'}),
-                html.Div(round(df[feature].std(), 3))
-            ], style={'display': 'flex'})
-        elif stat == 'min':
-            return html.Div([
+            ], style={'display': 'flex'}),
+            html.Div(style={'height': '5px'}),
+            html.Div([
                 html.B('Minimum:'),
                 html.Div(style={'width': '5px'}),
                 html.Div(round(df[feature].min(), 3))
-            ], style={'display': 'flex'})
-        elif stat == 'max':
-            return html.Div([
+            ], style={'display': 'flex'}),
+            html.Div(style={'height': '5px'}),
+            html.Div([
                 html.B('Maximum:'),
                 html.Div(style={'width': '5px'}),
                 html.Div(round(df[feature].max(), 3))
-            ], style={'display': 'flex'})
-        elif stat == 'skew':
-            return html.Div([
+            ], style={'display': 'flex'}),
+            html.Div(style={'height': '5px'}),
+            html.Div([
+                html.B('Standard Deviation:'),
+                html.Div(style={'width': '5px'}),
+                html.Div(round(df[feature].std(), 3))
+            ], style={'display': 'flex'}),
+            html.Div(style={'height': '5px'}),
+            html.Div([
                 html.B('Skew:'),
                 html.Div(style={'width': '5px'}),
                 html.Div(round(df[feature].skew(), 3))
-            ], style={'display': 'flex'})
-        elif stat == 'kurt':
-            return html.Div([
+            ], style={'display': 'flex'}),
+            html.Div(style={'height': '5px'}),
+            html.Div([
                 html.B('Kurtosis:'),
                 html.Div(style={'width': '5px'}),
                 html.Div(round(df[feature].kurt(), 3))
-            ], style={'display': 'flex'})
-    
+            ], style={'display': 'flex'}),
+            html.Div(style={'height': '5px'}),
+            html.Div([
+                html.B('Count:'),
+                html.Div(style={'width': '5px'}),
+                html.Div(round(df[feature].count(), 3))
+            ], style={'display': 'flex'}),
+        ])
+
+        histogram = dcc.Graph(
+            figure={
+                'data': [
+                    go.Histogram(
+                        x=df[feature],
+                        name=feature,
+                        histnorm='probability density',
+                        marker=dict(color='#37699b'),
+                    )
+                ],
+                'layout': go.Layout(
+                    title='Empirical Distribution',
+                    paper_bgcolor='rgba(0,0,0,0)',
+                    plot_bgcolor='rgba(0,0,0,0)',
+                    font=dict(color='#FFFFFF'),
+                    xaxis=dict(
+                        title=feature,
+                        titlefont=dict(color='#FFFFFF'),
+                        showgrid=False,
+                    ),
+                    yaxis=dict(
+                        title='Density',
+                        titlefont=dict(color='#FFFFFF'),
+                        showgrid=False,
+                    ),
+                )
+            }
+        )
+
+        return html.Div([
+            point_estimates,
+            histogram
+        ])
+
     raise PreventUpdate
 
 ############
 # Hit Rate #
 ############
-@app.callback(
-    Output('hit-rate-class', 'options'),
-    Input('hit-rate-feature', 'value'),
-    State('the-data', 'data')
-)
-def update_class(feature, data):
-    if feature and data:
-        df = pd.DataFrame.from_dict(data)
-        return [{'label': i, 'value': i} for i in df[feature].unique()]
-    raise PreventUpdate
-
 @app.callback(
     Output('hit-rate-filters-container', 'children'),
     Input('hit-rate-continuous-filters', 'value'),
@@ -206,7 +235,6 @@ def render_filters(continuous_filters, catagorical_filters, data):
 @app.callback(
     Output('hit-rate-output', 'children'),
     Input('hit-rate-feature', 'value'),
-    Input('hit-rate-class', 'value'),
     Input('hit-rate-continuous-filters', 'value'),
     Input('hit-rate-categorical-filters', 'value'),
     Input({'type': 'hit-rate-continuous-filter', 'index': ALL}, 'value'),
@@ -215,14 +243,13 @@ def render_filters(continuous_filters, catagorical_filters, data):
 )
 def calculate_hit_rate(
     feature,
-    _class,
     continous_filters,
     categorical_filters,
     filter_ranges,
     filter_categories,
     data
 ):
-    if feature and _class and data:
+    if feature and data:
         df = pd.DataFrame.from_dict(data)
         if continous_filters and filter_ranges:
             for feature_, range in zip(continous_filters, filter_ranges):
@@ -230,12 +257,54 @@ def calculate_hit_rate(
         if categorical_filters and filter_categories:
             if any(filter_categories):
                 for feature_, categories in zip(categorical_filters, filter_categories):
-                    df = df[df[feature_].isin(categories)]
+                    if categories: df = df[df[feature_].isin(categories)]
 
-        return html.Div([
-            html.B('Hit Rate:'),
-            html.Div(style={'width': '5px'}),
-            html.Div(round(df[df[feature] == _class].shape[0] / df.shape[0], 3))
-        ], style={'display': 'flex'})
+        children = [
+            html.Hr(),
+            html.Div(style={'height': '17px'}),
+        ]
+
+        # hit rates
+        for unique in df[feature].unique():
+            children.append(html.Div([
+                html.Div([
+                    html.B(f'{unique} Hit Rate:'),
+                    html.Div(style={'width': '5px'}),
+                    html.Div(round(df[df[feature] == unique].shape[0] / df.shape[0], 3))
+                ], style={'display': 'flex'}),
+                html.Div(style={'height': '5px'})
+            ]))
+
+        # histogram
+        children.append(dcc.Graph(
+            figure={
+                'data': [
+                    go.Histogram(
+                        x=df[feature],
+                        name=feature,
+                        histnorm='probability density',
+                        marker=dict(color='#37699b'),
+                    )
+                ],
+                'layout': go.Layout(
+                    title='Empirical Distribution',
+                    paper_bgcolor='rgba(0,0,0,0)',
+                    plot_bgcolor='rgba(0,0,0,0)',
+                    font=dict(color='#FFFFFF'),
+                    xaxis=dict(
+                        title=feature,
+                        titlefont=dict(color='#FFFFFF'),
+                        showgrid=False,
+                    ),
+                    yaxis=dict(
+                        title='Density',
+                        titlefont=dict(color='#FFFFFF'),
+                        showgrid=False,
+                    ),
+                )
+            }
+        ))
+
+        return children
 
     raise PreventUpdate
