@@ -766,7 +766,55 @@ tendencies = [
         dbc.Accordion([
             dbc.AccordionItem(
                 title="Descriptive Statistics",
-                children=[],
+                children=[
+                    html.Div([
+                        html.B('Feature', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='descriptive-stats-feature',
+                            options=[],
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        html.B('Descriptive Statistic', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='descriptive-stat',
+                            options=[
+                                {'label': 'Mean', 'value': 'mean'},
+                                {'label': 'Median', 'value': 'median'},
+                                {'label': 'Standard Deviation', 'value': 'std'},
+                                {'label': 'Minimum', 'value': 'min'},
+                                {'label': 'Maximum', 'value': 'max'},
+                                {'label': 'Skew', 'value': 'skew'},
+                                {'label': 'Kurtosis', 'value': 'kurt'},
+                            ],
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        html.B('Continous Filters', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='descriptive-stats-continuous-filters',
+                            options=[],
+                            multi=True,
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        html.B('Categorical Filters', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='descriptive-stats-categorical-filters',
+                            options=[],
+                            multi=True,
+                            style={'width': '100%'}
+                        ),
+                    ], style={'display': 'flex'}),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='descriptive-stats-filters-container'),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='descriptive-stats-output'),
+                ],
             ),
             dbc.AccordionItem(
                 title="Hit Rate",
@@ -1877,6 +1925,9 @@ app.layout = html.Div([
     Output('heatmap-sliders', 'options'),
     Output('drift-plot-feature', 'options'),
     Output('drift-plot-n-splits', 'max'),
+    Output('descriptive-stats-feature', 'options'),
+    Output('descriptive-stats-continuous-filters', 'options'),
+    Output('descriptive-stats-categorical-filters', 'options'),
     Output('hit-rate-feature', 'options'),
     Output('hit-rate-continuous-filters', 'options'),
     Output('hit-rate-categorical-filters', 'options'),
@@ -1920,6 +1971,9 @@ def update_ui_components(_, data):
             features, # heatmap-sliders
             features, # drift-plot-feature
             math.floor(len(df.index) / 2), # drift-plot-n-splits
+            features, # descriptive-stats-feature
+            features, # descriptive-stats-continuous-filters
+            features, # descriptive-stats-categorical-filters
             features, # hit-rate-feature
             features, # hit-rate-continuous-filters
             features, # hit-rate-categorical-filters
