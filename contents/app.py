@@ -760,6 +760,77 @@ temporal_sequence = [
         id='temporal-sequence-container-popover',
     ),
 ]
+tendencies = [
+    html.H2('Tendencies'),
+    dmc.Container([
+        dbc.Accordion([
+            dbc.AccordionItem(
+                title="Descriptive Statistics",
+                children=[],
+            ),
+            dbc.AccordionItem(
+                title="Hit Rate",
+                children=[
+                    html.Div([
+                        html.B('Feature', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='hit-rate-feature',
+                            options=[],
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        html.B('Class', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='hit-rate-class',
+                            options=[],
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        html.B('Continuous Filters', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='hit-rate-continuous-filters',
+                            options=[],
+                            multi=True,
+                            style={'width': '100%'}
+                        ),
+                        html.Div(style={'width': '20px'}),
+                        html.B('Categorical Filters', style={'margin-top': '5px', 'white-space': 'nowrap'}),
+                        html.Div(style={'width': '5px'}),
+                        dcc.Dropdown(
+                            id='hit-rate-categorical-filters',
+                            options=[],
+                            multi=True,
+                            style={'width': '100%'}
+                        ),
+                    ], style={'display': 'flex'}),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='hit-rate-filters-container'),
+                    html.Div(style={'height': '10px'}),
+                    html.Div(id='hit-rate-output'),
+                ],
+            ),
+        ], start_collapsed=True, always_open=False),
+    ],
+    id='tendencies-container',
+    fluid=True,
+    style={
+        'border-style': 'solid',
+        'border-color': 'grey',
+        'border-width': '1px',
+        'padding': '12px',
+    }
+    ),
+    dbc.Popover(
+        [],
+        target='tendencies-container',
+        trigger='hover',
+        hide_arrow=True,
+        id='tendencies-container-popover',
+    ),
+]
 
 feature_importance = [
     html.H2('Feature Importance'),
@@ -1480,6 +1551,28 @@ app.layout = html.Div([
                     hide_arrow=True,
                     id='temporal-sequence-navbutton-popover',
                 ),
+                # tendencies
+                dbc.Button(
+                    html.A([
+                        DashIconify(
+                            icon="dashicons:controls-repeat",
+                            width=30,
+                            height=30,
+                        ),
+                        html.Span(style={"margin-left": "10px"}),
+                        "Tendencies",
+                    ], href='#tendencies', style={'color': 'white', 'text-decoration': 'none'}),
+                    outline=True,
+                    style={'textAlign': 'left', 'width': '100%'},
+                    id='navbutton-tendencies'
+                ),
+                dbc.Popover(
+                    [],
+                    target='navbutton-tendencies',
+                    trigger='hover',
+                    hide_arrow=True,
+                    id='tendencies-navbutton-popover',
+                ),
                 ############################################################################################
                 # MACHINE LEARNING
                 html.Div([
@@ -1699,6 +1792,13 @@ app.layout = html.Div([
                 bullet=DashIconify(icon="ic:outline-access-time", width=25, height=25),
                 style={'color': '#FFFFFF'},
             ),
+            dmc.TimelineItem(
+                id='tendencies',
+                lineVariant='solid',
+                children=tendencies,
+                bullet=DashIconify(icon="dashicons:controls-repeat", width=25, height=25),
+                style={'color': '#FFFFFF'},
+            ),
             # Machine Learning
             dmc.TimelineItem(
                 id='feature-importance',
@@ -1777,6 +1877,9 @@ app.layout = html.Div([
     Output('heatmap-sliders', 'options'),
     Output('drift-plot-feature', 'options'),
     Output('drift-plot-n-splits', 'max'),
+    Output('hit-rate-feature', 'options'),
+    Output('hit-rate-continuous-filters', 'options'),
+    Output('hit-rate-categorical-filters', 'options'),
     Output('boruta-shap-target', 'options'),
     Output('clf-target', 'options'),
     Output('clf-features', 'options'),
@@ -1817,6 +1920,9 @@ def update_ui_components(_, data):
             features, # heatmap-sliders
             features, # drift-plot-feature
             math.floor(len(df.index) / 2), # drift-plot-n-splits
+            features, # hit-rate-feature
+            features, # hit-rate-continuous-filters
+            features, # hit-rate-categorical-filters
             features, # boruta-shap-target
             features, # clf-target
             [{'label': 'ALL FEATURES', 'value': 'ALL FEATURES'}] + features, # clf-features
@@ -1926,6 +2032,17 @@ def hover_statistical_association(is_open1, is_open2):
     Input('temporal-sequence-container-popover', 'is_open')
 )
 def hover_temporal_sequence(is_open1, is_open2):
+    if is_open1 or is_open2:
+        return False, 'dashed'
+    return True, 'solid'
+
+@app.callback(
+    Output('navbutton-tendencies', 'outline'),
+    Output('tendencies', 'lineVariant'),
+    Input('tendencies-navbutton-popover', 'is_open'),
+    Input('tendencies-container-popover', 'is_open')
+)
+def hover_tendencies(is_open1, is_open2):
     if is_open1 or is_open2:
         return False, 'dashed'
     return True, 'solid'

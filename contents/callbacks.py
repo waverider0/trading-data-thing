@@ -5,6 +5,7 @@ from contents._data.preprocessing import *
 from contents._analysis_tools.distributions import *
 from contents._analysis_tools.statistical_association import *
 from contents._analysis_tools.temporal_sequence import *
+from contents._analysis_tools.tendencies import *
 
 from contents._machine_learning.feature_importance import *
 from contents._machine_learning.dimensionality_reduction import *
