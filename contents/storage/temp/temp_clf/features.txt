@@ -1,1 +1,1 @@
-Day Of Week,GAP%,Outstanding Shares,Market Cap,Avg Prev 3 Day Volume,PM Volume,PM Trades,PM Volume / Avg Prev 3 Day Volume
+Outstanding Shares,Market Cap,Avg Prev 3 Day Volume,Gap%,PM Trades,PM Volume,Daily  Trades,PM Dollar Volume,Daily Volume,Daily Dollar Volume,PM Whale Ratio,Daily Whale Ratio,PM Supply Rotations,Daily Supply Rotations,PM Mkt Cap Rotations,Daily Mkt Cap Rotations

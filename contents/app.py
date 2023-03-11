@@ -272,6 +272,17 @@ add_features = [
                 ]
             ),
             dbc.AccordionItem(
+                title="Add Macro Features",
+                children=[
+                    dbc.Button(
+                        'Add Macro Features',
+                        id='add-macro-features-button',
+                        color='primary',
+                        style={'width': '100%'}
+                    )
+                ]
+            ),
+            dbc.AccordionItem(
                 title="Metalabels",
                 children=[
                     html.Div([

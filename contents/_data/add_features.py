@@ -27,6 +27,9 @@ def drop_features(n_clicks, features, data):
         return df.to_dict('records'), ''
     raise PreventUpdate
 
+def drop_rows():
+    pass
+
 @app.callback(
     Output('the-data', 'data'),
     Output('hidden-div', 'children'),

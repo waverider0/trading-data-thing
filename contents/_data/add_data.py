@@ -30,3 +30,15 @@ def upload_data(contents, filename, date):
         return df.to_dict('records'), ''
     raise PreventUpdate
 
+def clear_data():
+    pass
+
+@app.callback(
+    Output('to-csv', 'data'),
+    Input('download-data-button', 'n_clicks'),
+    State('the-data', 'data')
+)
+def download_data(n_clicks, data):
+    if n_clicks and data:
+        df = pd.DataFrame.from_dict(data)
+        return dcc.send_data_frame(df.to_csv, 'data.csv')

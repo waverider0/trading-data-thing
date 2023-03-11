@@ -274,6 +274,11 @@ def calculate_hit_rate(
                 ], style={'display': 'flex'}),
                 html.Div(style={'height': '5px'})
             ]))
+        children.append(html.Div([
+            html.B('Count:'),
+            html.Div(style={'width': '5px'}),
+            html.Div(df[feature].count())
+        ], style={'display': 'flex'}))
 
         # histogram
         children.append(dcc.Graph(

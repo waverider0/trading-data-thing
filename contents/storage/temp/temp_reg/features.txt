@@ -1,1 +1,1 @@
-GAP%,Market Cap,Day Of Week,Outstanding Shares,PM Volume
+ZF=F,^VIX,DGS3,CORESTICKM159SFRBATL,Outstanding Shares,RSXFS
