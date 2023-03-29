@@ -1,1 +1,1 @@
-ZF=F,^VIX,DGS3,CORESTICKM159SFRBATL,Outstanding Shares,RSXFS
+PM Trades,Avg Prev 3 Day Volume,Gap%,PM Volume
